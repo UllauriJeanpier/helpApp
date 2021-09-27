@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="19px" viewBox="0 0 20 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.1 (67048) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="REGÍSTRO" transform="translate(-28.000000, -1087.000000)">
+            <g id="Group" transform="translate(28.000000, 1087.000000)">
+                <rect id="Rectangle" fill="#910035" x="0" y="0" width="20" height="19" rx="3"></rect>
+                <path d="M8.71715661,12.8656925 L6.1171567,10.2656926 C5.96095285,10.1094887 5.96095285,9.85622393 6.1171567,9.70000482 L6.68282918,9.13431708 C6.83903303,8.97809797 7.09231307,8.97809797 7.24851692,9.13431708 L8.99999285,10.885793 L12.751464,7.13432185 C12.9076679,6.978118 13.1609479,6.978118 13.3171517,7.13432185 L13.8828242,7.70000958 C14.0390281,7.85621344 14.0390281,8.10947821 13.8828242,8.26569732 L9.28282909,12.8657077 C9.12660998,13.0219116 8.8733452,13.0219116 8.71715661,12.8656925 Z" id="CHECK-Copy-4" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

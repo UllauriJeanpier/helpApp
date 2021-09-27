@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="28px" viewBox="0 0 20 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.1 (67048) - http://www.bohemiancoding.com/sketch -->
+    <title>placeholder</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="iPhone-XS-Max-Copy-18" transform="translate(-251.000000, -479.000000)">
+            <g id="placeholder" transform="translate(251.000000, 479.000000)">
+                <path d="M10,0 C4.48595262,0 0,4.36602786 0,9.73266602 C0,16.4778137 10,28 10,28 C10,28 20,16.1460572 20,9.73266602 C20,4.36602786 15.5140474,0 10,0 Z" id="Path" fill="#109849"></path>
+                <path d="M12.8297051,12.8299761 C12.0495085,13.609992 11.0247542,14 10,14 C8.97524577,14 7.95028565,13.609992 7.17029493,12.8299761 C5.60990169,11.27015 5.60990169,8.73190813 7.17029493,7.17187623 C7.92599454,6.41614574 8.93098658,6 10,6 C11.0690134,6 12.0737996,6.41635153 12.8297051,7.17187623 C14.3900983,8.73190813 14.3900983,11.27015 12.8297051,12.8299761 Z" id="Path" fill="#E9FFF2"></path>
+            </g>
+        </g>
+    </g>
+</svg>
