@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { COLORS } from '../utils/constants'
-import Chevron from '../assets/svg/Alerta.svg'
 
 interface Props {
   title: string
@@ -11,8 +10,7 @@ interface Props {
 const Header = ({ title }: Props) => {
   return (
     <View style={ styles.container }>
-      <Text>{ title }</Text>
-      <Chevron width={ 60 } height={ 50 } />
+      <Text style={ styles.title }>{ title }</Text>
     </View>
   )
 }
@@ -27,5 +25,9 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.PRIMARY,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  title: {
+    color: 'white',
+    fontSize: 18
   }
 })
