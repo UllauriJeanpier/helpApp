@@ -1,6 +1,6 @@
 import React, { Dispatch } from 'react'
 import { KeyboardTypeOptions, StyleSheet, Text, TextInput, TextInputAndroidProps, View } from 'react-native'
-import { COLORS } from '../utils/constants'
+import { COLORS, FONTS } from '../utils/constants'
 
 interface Props {
   label: string
@@ -10,6 +10,7 @@ interface Props {
   errorMessage: string
   valueInput: string
   validateInput: boolean
+  isPassword?: boolean | undefined
   keyboardType?: KeyboardTypeOptions
   setValueInput: Dispatch<React.SetStateAction<string>>
   setValidateInput: Dispatch<React.SetStateAction<boolean>>
@@ -27,7 +28,8 @@ const InputForm = ({
   disabledInput,
   limitCaracteres,
   errorMessage,
-  keyboardType
+  keyboardType,
+  isPassword
 }: Props) => {
   const validateFunction = (e: string) => {
     if (functionValidation(e)) {
@@ -46,6 +48,8 @@ const InputForm = ({
           value={ valueInput }
           editable={ disabledInput }
           keyboardType={ keyboardType }
+          textContentType={ isPassword ? 'password' : undefined }
+          secureTextEntry={ isPassword }
           maxLength={ limitCaracteres }
           style={ styles.inputWidth }
           onChangeText={ e => validateFunction(e) }
@@ -54,7 +58,7 @@ const InputForm = ({
       { valueInput.length === 0
         ? null
         : !validateInput
-            ? (<Text>{ errorMessage }</Text>)
+            ? (<Text style={ styles.errorMsg }>{ errorMessage }</Text>)
             : null }
 
     </View>
@@ -69,6 +73,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red'
   },
   txtlabel: {
+    fontFamily: FONTS.ProximaNovaBold,
     fontSize: 15
   },
   inputContainer: {
@@ -83,8 +88,14 @@ const styles = StyleSheet.create({
   },
   inputWidth: {
     width: '90%',
-    fontSize: 15
+    fontSize: 15,
+    fontFamily: FONTS.ProximaNovaRegular
     // backgroundColor: 'red'
-
+  },
+  errorMsg: {
+    margin: 5,
+    fontSize: 15,
+    fontFamily: FONTS.ProximaNovaRegular,
+    color: 'red'
   }
 })

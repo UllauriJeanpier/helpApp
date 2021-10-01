@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { COLORS } from '../utils/constants'
+import { COLORS, FONTS } from '../utils/constants'
 
 interface Props {
   title: string
@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: 40
   },
   text: {
-    color: 'white'
+    color: 'white',
+    fontFamily: FONTS.ProximaNovaBold
   }
 })
