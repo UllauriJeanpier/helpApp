@@ -7,10 +7,13 @@ export const handleName = (text: string) => {
 }
 
 export const handleAge = (text: string) => {
-  if (text.length < 3) {
-    return false
-  } else {
+  const regexAge = /^[0-9]*$/
+  if (!regexAge.test(text)) return false
+  const age = Number(text)
+  if (age >= 10 && age <= 200) {
     return true
+  } else {
+    return false
   }
 }
 

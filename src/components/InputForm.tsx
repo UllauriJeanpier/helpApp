@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
-
 import React, { Dispatch } from 'react'
 import { KeyboardTypeOptions, StyleSheet, Text, TextInput, TextInputAndroidProps, View } from 'react-native'
 import { COLORS } from '../utils/constants'
@@ -56,8 +54,8 @@ const InputForm = ({
       { valueInput.length === 0
         ? null
         : !validateInput
-          ? (<Text>{ errorMessage }</Text>)
-          : null }
+            ? (<Text>{ errorMessage }</Text>)
+            : null }
 
     </View>
   )
@@ -67,7 +65,7 @@ export default InputForm
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 10
+    paddingVertical: 20
     // backgroundColor: 'red'
   },
   txtlabel: {
