@@ -47,6 +47,7 @@ const SignInScreen = ({ navigation }: Props) => {
             setValidateInput={ setValidatePassword }
             functionValidation={ handlePassword }
             errorMessage={ 'Escribe una contraseña válida' }
+            isPassword
           />
         </View>
         <View style={ styles.sesionContainer }>

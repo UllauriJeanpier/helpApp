@@ -121,6 +121,7 @@ const SignUpScreen = ({ navigation }: Props) => {
           setValidateInput={ setValidatePassword }
           functionValidation={ handlePassword }
           errorMessage={ 'Escribe una contraseña válida' }
+          isPassword
         />
         <InputForm
           label={ 'Confirmar contraseña:' }
@@ -131,6 +132,7 @@ const SignUpScreen = ({ navigation }: Props) => {
           setValidateInput={ setValidateConfirmPassword }
           functionValidation={ handlePassword }
           errorMessage={ 'Escribe una contraseña válida' }
+          isPassword
         />
         <View style={ styles.checkSection }>
           <Checkbox
