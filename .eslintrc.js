@@ -41,9 +41,10 @@ module.exports = {
     }],
     'eol-last': ['error', 'always'],
     'no-multiple-empty-lines': 'error',
+    'eslint-disable @typescript-eslint/indent': 'off',
     semi: ['error', 'never'],
     // Indent with 2 spaces
-    indent: ['error', 2],
+    /* indent: ['error', 2], */
     // Indent JSX with 2 spaces
     'react/jsx-indent': ['error', 2],
     // Indent props with 2 spaces
