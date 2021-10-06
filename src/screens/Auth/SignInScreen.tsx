@@ -19,9 +19,7 @@ const SignInScreen = ({ navigation }: Props) => {
 
   const goToSignUp = () => navigation.navigate('SignUpScreen')
 
-  const login = () => {
-    console.log('Logeando')
-  }
+  const login = () => navigation.navigate('DrawerNavigator')
 
   return (
     <ScrollView>
