@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Text, Platform } from 'react-native'
+import { Platform } from 'react-native'
 import Constants from 'expo-constants'
 import * as Notifications from 'expo-notifications'
 import { Subscription } from '@unimodules/core'
@@ -60,14 +60,14 @@ const useNotifications = () => {
       console.log('Hubo un error al obtener el ExpoPushtoken', err)
     }
 
-    /* if (Platform.OS === 'android') {
+    if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
         lightColor: '#FF231F7C'
       })
-    } */
+    }
   }
 }
 
