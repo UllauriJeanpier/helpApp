@@ -65,7 +65,10 @@ const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
             title={ 'Números de ayuda' }
             action={ () => navigation.navigate('NumberScreen') } />
         </View>
-        <BtnOption title={ 'Cerrar sesión' } isLogoutOption action={ () => navigation.navigate('IndexScreen') } />
+        <BtnOption
+          title={ 'Cerrar sesión' }
+          isLogoutOption
+          action={ () => navigation.navigate('IndexScreen') } />
       </View>
     </View>
   )
