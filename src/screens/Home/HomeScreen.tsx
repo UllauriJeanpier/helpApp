@@ -1,13 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import Alarma from '../../assets/svg/Alarma5.svg'
 import Info from '../../assets/svg/info.svg'
 import Header from '../../components/Header'
+import ModalInfo from '../../components/ModalInfo'
 import { COLORS, FONTS, SCREEN } from '../../utils/constants'
 
 const HomeScreeen = () => {
+  const [modalVisible, setModalVisible] = useState(true)
+
   return (
     <>
+      <ModalInfo
+        isVisible={ modalVisible }
+        hideAction={ () => setModalVisible(false) }
+      />
       <Header title='Yanapakun Policía' />
       <View style={ styles.container }>
         <Text style={ styles.txtInfo }>
