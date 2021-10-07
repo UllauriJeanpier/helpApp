@@ -1,6 +1,10 @@
+import { Dimensions } from 'react-native'
+
 export enum COLORS {
   PRIMARY='#216D3F',
-  SECONDARY= '#0C4724'
+  SECONDARY= '#0C4724',
+  TEXT_COLOR='#3A413D',
+  TEXT_EMERGENCY= '#E30027'
 }
 
 export const FONTS_TO_LOAD = {
@@ -23,4 +27,9 @@ export enum FONTS {
   ProximaNovaAltThin= 'ProximaNovaAltThin',
   ProximaNovaAltLight='ProximaNovaAltLight',
   ProximaNovaAltBold= 'ProximaNovaAltBold'
+}
+
+export enum SCREEN {
+  width= Dimensions.get('window').width,
+  height=Dimensions.get('window').height
 }
