@@ -1,6 +1,7 @@
 export enum COLORS {
   PRIMARY='#216D3F',
-  SECONDARY= '#0C4724'
+  SECONDARY= '#0C4724',
+  TEXT_COLOR='#3A413D'
 }
 
 export const FONTS_TO_LOAD = {

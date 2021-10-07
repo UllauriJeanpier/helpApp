@@ -5,7 +5,7 @@ import * as Notifications from 'expo-notifications'
 import { Subscription } from '@unimodules/core'
 
 const useNotifications = () => {
-  const [expoPushToken, setExpoPushToken] = useState<string | undefined>()
+  const [expoPushToken, setExpoPushToken] = useState<string>()
   const [notification, setNotification] = useState<Notifications.Notification>()
   const notificationListener = useRef<Subscription>()
   const responseListener = useRef<Subscription>()
