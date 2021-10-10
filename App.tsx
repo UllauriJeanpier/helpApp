@@ -8,7 +8,7 @@ import { COLORS, FONTS_TO_LOAD } from './src/utils/constants'
 import { useFonts } from 'expo-font'
 import * as Notifications from 'expo-notifications'
 import useNotifications from './src/hooks/useNotifications'
-import { AuthProvider } from './src/context/authContext/authContext'
+import { AuthProvider } from './src/context/authContext'
 
 // Function that decides whether the notification is displayed or not
 
@@ -31,10 +31,13 @@ export default function App () {
   }
 
   return (
+
     <SafeAreaProvider>
       <NavigationContainer>
-        <StatusBar backgroundColor={ COLORS.SECONDARY }/>
-        <StackNavigator />
+        <AppState>
+          <StatusBar backgroundColor={ COLORS.SECONDARY }/>
+          <StackNavigator />
+        </AppState>
       </NavigationContainer>
     </SafeAreaProvider>
 

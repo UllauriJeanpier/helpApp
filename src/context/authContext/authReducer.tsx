@@ -1,5 +1,6 @@
+import React from 'react'
 import { IDataLogin } from '../../interfaces/authInterfaces'
-import { AuthState } from './authContext'
+import { AuthState } from '.'
 
 type AuthActions = {type: 'signIn', payload: IDataLogin}
 

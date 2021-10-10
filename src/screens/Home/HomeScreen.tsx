@@ -1,20 +1,19 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useContext, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Alarma from '../../assets/svg/Alarma5.svg'
 import Info from '../../assets/svg/info.svg'
 import Header from '../../components/Header'
 import ModalInfo from '../../components/ModalInfo'
+import { AuthContext } from '../../context/authContext'
 import { COLORS, FONTS, SCREEN } from '../../utils/constants'
 
 const HomeScreeen = () => {
   const [modalVisible, setModalVisible] = useState(true)
 
+  const { signIn, authState } = useContext(AuthContext)
+
   return (
     <>
-      <ModalInfo
-        isVisible={ modalVisible }
-        hideAction={ () => setModalVisible(false) }
-      />
       <Header title='Yanapakun Policía' />
       <View style={ styles.container }>
         <Text style={ styles.txtInfo }>
@@ -22,9 +21,12 @@ const HomeScreeen = () => {
           presiona el botón para que una
           autoridad se dirija a tu ubicación
         </Text>
-        <View style={ styles.imageContainer }>
+        <TouchableOpacity style={ styles.imageContainer } onPress={ () => {
+          signIn()
+          console.log(JSON.stringify(authState, null, 4))
+        } } >
           <Alarma width={ '100%' } height={ SCREEN.height * 0.3 } />
-        </View>
+        </TouchableOpacity>
         <Text style={ styles.txtEmergency }>
           SOLO EN CASO DE EMERGENCIA
         </Text>
@@ -37,6 +39,10 @@ const HomeScreeen = () => {
           </Text>
         </View>
       </View>
+      <ModalInfo
+        isVisible={ modalVisible }
+        hideAction={ () => setModalVisible(false) }
+      />
     </>
   )
 }
