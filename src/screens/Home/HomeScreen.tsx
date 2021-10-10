@@ -5,12 +5,29 @@ import Info from '../../assets/svg/info.svg'
 import Header from '../../components/Header'
 import ModalInfo from '../../components/ModalInfo'
 import { AuthContext } from '../../context/authContext'
+import { IPosition } from '../../interfaces/locationInterface'
 import { COLORS, FONTS, SCREEN } from '../../utils/constants'
+import { getCurrentLocation } from '../../utils/helpers'
 
 const HomeScreeen = () => {
   const [modalVisible, setModalVisible] = useState(true)
 
-  const { signIn, authState } = useContext(AuthContext)
+  const [location, setlocation] = useState<IPosition>()
+
+  const getLocation = async () => {
+    const { status, position } = await getCurrentLocation()
+    if (!status) {
+      // Mostrar nuevamente el modal
+      setModalVisible(true)
+      return
+    }
+    position && setlocation(position)
+    console.log(location)
+
+    // Guardar latitud y longitud
+  }
+
+  /* const { signIn, authState } = useContext(AuthContext) */
 
   return (
     <>
@@ -21,10 +38,7 @@ const HomeScreeen = () => {
           presiona el botón para que una
           autoridad se dirija a tu ubicación
         </Text>
-        <TouchableOpacity style={ styles.imageContainer } onPress={ () => {
-          signIn()
-          console.log(JSON.stringify(authState, null, 4))
-        } } >
+        <TouchableOpacity style={ styles.imageContainer } onPress={ getLocation } >
           <Alarma width={ '100%' } height={ SCREEN.height * 0.3 } />
         </TouchableOpacity>
         <Text style={ styles.txtEmergency }>
