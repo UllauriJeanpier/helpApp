@@ -20,12 +20,14 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.likeseasons.yanapakun",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "permissions": ["NOTIFICATIONS"],
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
