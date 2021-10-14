@@ -1,0 +1,16 @@
+<svg width="168" height="189" viewBox="0 0 168 189" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group">
+<g id="Bitmap Copy">
+<path id="Mask" fill-rule="evenodd" clip-rule="evenodd" d="M0 15C0 6.71573 6.71573 0 15 0H153C161.284 0 168 6.71573 168 15V174C168 182.284 161.284 189 153 189H15C6.71573 189 0 182.284 0 174V15Z" fill="#E8E1D4"/>
+<mask id="mask0_0:2355" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="168" height="189">
+<path id="Mask_2" fill-rule="evenodd" clip-rule="evenodd" d="M0 15C0 6.71573 6.71573 0 15 0H153C161.284 0 168 6.71573 168 15V174C168 182.284 161.284 189 153 189H15C6.71573 189 0 182.284 0 174V15Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_0:2355)">
+</g>
+</g>
+<g id="user (2)">
+<path id="Path" fill-rule="evenodd" clip-rule="evenodd" d="M95.8705 95H71.1295C46.7962 95 27 114.985 27 139.549V169H140V139.549C140 114.985 120.204 95 95.8705 95Z" fill="#FFFCF7"/>
+<path id="Path_2" fill-rule="evenodd" clip-rule="evenodd" d="M83 21C64.2521 21 49 36.4767 49 55.5001C49 74.5233 64.2521 90 83 90C101.748 90 117 74.5233 117 55.4999C117 36.4767 101.748 21 83 21Z" fill="#FFFCF7"/>
+</g>
+</g>
+</svg>
