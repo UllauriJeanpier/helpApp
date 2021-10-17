@@ -1,5 +1,5 @@
 
-import React, { useContext, useReducer } from 'react'
+import React, { useContext, useEffect, useReducer } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import IndexScreen from '../screens/Auth/IndexScreen'
@@ -21,9 +21,10 @@ export type RootStackParams = {
 const Stack = createNativeStackNavigator<RootStackParams>()
 const StackNavigator = () => {
   const { authState } = useContext(AuthContext)
+
   return (
     <Stack.Navigator initialRouteName={ 'IndexScreen' } screenOptions={ { headerShown: false } } >
-      { !authState.isLoggdIn
+      { !authState.isLoggdIn && !authState.token
         ? (
           <>
             <Stack.Screen name="IndexScreen" component={ IndexScreen } />

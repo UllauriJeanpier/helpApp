@@ -27,6 +27,8 @@ export const authInitialState: AuthState = {
 export interface AuthContextProps {
   authState: AuthState
   signIn: (payload: any) => void
+  getAuthState: () => void
+  logOut: () => void
 }
 
 // create context
@@ -35,18 +37,38 @@ export const AuthContext = createContext({} as AuthContextProps)
 export const AuthProvider = ({ children }: any) => {
   const [authState, dispatch] = useReducer(authReducer, authInitialState)
 
-  const getAuthState = async (payload: IDataLogin) => {
+  const logOut = async () => {
     try {
-      const authDataString = await AsyncStorage.getItem('token')
-      const authData = JSON.parse(authDataString ?? '')
-      configureAxiosHeaders(authData)
-      dispatch({ type: 'signIn', payload: payload })
-    } catch (err) {
-      Promise.reject(err)
+      await AsyncStorage.removeItem('token')
+      await AsyncStorage.removeItem('user', () => { })
+      await AsyncStorage.removeItem('isLoggdIn')
+      getAuthState()
+    } catch (e) {
+      // remove error
+      console.log(e)
     }
   }
 
-  const signIn = async (payload: any) => {
+  const getAuthState = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token') ?? ''
+      const isLoggdIn = await AsyncStorage.getItem('isLoggdIn') ?? ''
+      const user = await AsyncStorage.getItem('user') ?? ''
+      const data = {
+        isLoggdIn: isLoggdIn ? JSON.parse(isLoggdIn) : false,
+        access_token: token ? JSON.parse(token) : '',
+        user: user ? JSON.parse(user) : {}
+      }
+      dispatch({ type: 'signIn', payload: data })
+      if (data.isLoggdIn) {
+        configureAxiosHeaders(token)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const signIn = async (payload: { email: string, password: string }) => {
     const data = JSON.stringify({
       email: payload.email,
       password: payload.password
@@ -63,6 +85,8 @@ export const AuthProvider = ({ children }: any) => {
       const { data }: IResLogin = response.data
       if (response.status === 201) {
         await AsyncStorage.setItem('token', JSON.stringify(data.access_token))
+        await AsyncStorage.setItem('user', JSON.stringify(data.user))
+        await AsyncStorage.setItem('isLoggdIn', JSON.stringify(true))
         configureAxiosHeaders(data.access_token)
         dispatch({ type: 'signIn', payload: data })
       }
@@ -71,10 +95,16 @@ export const AuthProvider = ({ children }: any) => {
     })
   }
 
+  useEffect(() => {
+    getAuthState()
+  }, [])
+
   return (
     <AuthContext.Provider value={ {
       authState,
-      signIn
+      signIn,
+      getAuthState,
+      logOut
     } }>
       { children }
     </AuthContext.Provider>

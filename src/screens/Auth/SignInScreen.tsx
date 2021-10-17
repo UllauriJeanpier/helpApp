@@ -1,7 +1,7 @@
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useContext, useState } from 'react'
-import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import Button from '../../components/Button'
 import Header from '../../components/Header'
 import InputForm from '../../components/InputForm'
