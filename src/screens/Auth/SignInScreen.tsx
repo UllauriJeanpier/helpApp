@@ -1,10 +1,11 @@
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, ScrollView } from 'react-native'
 import Button from '../../components/Button'
 import Header from '../../components/Header'
 import InputForm from '../../components/InputForm'
+import { AuthContext } from '../../context/authContext'
 import { RootStackParams } from '../../navigation/StackNavigator'
 import { COLORS } from '../../utils/constants'
 import { handleEmail, handlePassword } from '../../utils/validateFuntions'
@@ -16,10 +17,13 @@ const SignInScreen = ({ navigation }: Props) => {
   const [validateEmail, setValidateEmail] = useState(false)
   const [password, setPassword] = useState('')
   const [validatePassword, setValidatePassword] = useState(false)
+  const { signIn } = useContext(AuthContext)
 
   const goToSignUp = () => navigation.navigate('SignUpScreen')
 
-  const login = () => navigation.navigate('DrawerNavigator')
+  const login = () => {
+    signIn({ email, password })
+  }
 
   return (
     <ScrollView>
@@ -68,7 +72,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 25,
     paddingTop: 75,
-    // backgroundColor: 'red',
     justifyContent: 'space-evenly'
   },
   inputsContainer: {

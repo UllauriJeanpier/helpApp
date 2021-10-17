@@ -1,28 +1,16 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 
-import React, { createContext, useReducer } from 'react'
+import React, { createContext, useEffect, useReducer } from 'react'
 import axios, { AxiosRequestConfig } from 'axios'
-/* import authActions from './authActions' */
 import { authReducer } from './authReducer'
-import { IResLogin } from '../../interfaces/authInterfaces'
+import { IDataLogin, IResLogin } from '../../interfaces/authInterfaces'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-// Prueba Axios
+axios.defaults.baseURL = 'https://yanapakunpolicia.com'
 
-const data = JSON.stringify({
-  email: '1999yaiper@gmail.com',
-  password: 'test12345'
-})
-
-const config: AxiosRequestConfig = {
-  method: 'post',
-  url: 'https://yanapakunpolicia.com/auth/login',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  data: data
+const configureAxiosHeaders = (token: string) => {
+  axios.defaults.headers.Authorization = `Bearer ${token}`
 }
-
-//* ****************************** */
 
 export interface AuthState {
   isLoggdIn: boolean
@@ -32,36 +20,55 @@ export interface AuthState {
 }
 
 // initial State
-
 export const authInitialState: AuthState = {
   isLoggdIn: false
 }
 
 export interface AuthContextProps {
   authState: AuthState
-  signIn: () => void
+  signIn: (payload: any) => void
 }
 
 // create context
-
 export const AuthContext = createContext({} as AuthContextProps)
 
 export const AuthProvider = ({ children }: any) => {
   const [authState, dispatch] = useReducer(authReducer, authInitialState)
 
-  const signIn = async () => {
-    axios(config)
-      .then((response) => {
-        /* console.log(JSON.stringify(response.data)) */
-        const { data, message }: IResLogin = response.data
-        if (message !== 'Unauthorized') {
-          // Funcion dispatch
-          dispatch({ type: 'signIn', payload: data })
-        }
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+  const getAuthState = async (payload: IDataLogin) => {
+    try {
+      const authDataString = await AsyncStorage.getItem('token')
+      const authData = JSON.parse(authDataString ?? '')
+      configureAxiosHeaders(authData)
+      dispatch({ type: 'signIn', payload: payload })
+    } catch (err) {
+      Promise.reject(err)
+    }
+  }
+
+  const signIn = async (payload: any) => {
+    const data = JSON.stringify({
+      email: payload.email,
+      password: payload.password
+    })
+    const config: AxiosRequestConfig = {
+      method: 'post',
+      url: 'https://yanapakunpolicia.com/auth/log-in',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data
+    }
+    axios(config).then(async (response) => {
+      const { data }: IResLogin = response.data
+      if (response.status === 201) {
+        await AsyncStorage.setItem('token', JSON.stringify(data.access_token))
+        configureAxiosHeaders(data.access_token)
+        dispatch({ type: 'signIn', payload: data })
+      }
+    }).catch(error => {
+      console.log(error.message)
+    })
   }
 
   return (
