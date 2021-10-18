@@ -1,11 +1,10 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, {useState} from 'react'
+import { StyleSheet, View,} from 'react-native';
 
 const LanguageScreen = () => {
+  const [modalLanguage, setModalLanguage] = useState(true)
   return (
-    <View>
-      <Text>LanguageScreen</Text>
-    </View>
+    <View></View>
   )
 }
 
