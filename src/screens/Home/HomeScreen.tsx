@@ -4,15 +4,18 @@ import Alarma from '../../assets/svg/Alarma5.svg'
 import Info from '../../assets/svg/info.svg'
 import Header from '../../components/Header'
 import ModalInfo from '../../components/ModalInfo'
+import ModalLanguage from '../../components/ModalLanguage'
 import { AuthContext } from '../../context/authContext'
 import { IPosition } from '../../interfaces/locationInterface'
 import { COLORS, FONTS, SCREEN } from '../../utils/constants'
 import { getCurrentLocation } from '../../utils/helpers'
 
 const HomeScreeen = () => {
-  const [modalVisible, setModalVisible] = useState(true)
+  const [modalVisible, setModalVisible] = useState(false)
 
   const [location, setlocation] = useState<IPosition>()
+
+  const [modalLanguage, setModalLanguage] = useState(true)
 
   const getLocation = async () => {
     const { status, position } = await getCurrentLocation()
@@ -56,6 +59,11 @@ const HomeScreeen = () => {
       <ModalInfo
         isVisible={ modalVisible }
         hideAction={ () => setModalVisible(false) }
+      />
+      {/* Modal Language  */}
+      <ModalLanguage
+        isVisible={ modalLanguage }
+        hideAction={ () => setModalLanguage(false)}
       />
     </>
   )
