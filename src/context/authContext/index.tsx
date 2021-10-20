@@ -7,12 +7,6 @@ import { IDataLogin, IResLogin } from '../../interfaces/authInterfaces'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { isPast, addMinutes } from 'date-fns'
 
-axios.defaults.baseURL = 'https://yanapakunpolicia.com'
-
-const configureAxiosHeaders = (token: string) => {
-  axios.defaults.headers.Authorization = 'Bearer ' + JSON.stringify(token)
-}
-
 export interface AuthState {
   isLoggdIn: boolean
   token?: string
@@ -49,19 +43,18 @@ export const AuthProvider = ({ children }: any) => {
           method: 'get',
           url: 'https://yanapakunpolicia.com/auth/token',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
           }
         }
-        console.log(axios.defaults.headers.Authorization)
         axios(config).then(async (response) => {
           const { data }: IResLogin = response.data
           if (response.status === 201) {
             const tokenExpiration = addMinutes(new Date(), 1)
-            await AsyncStorage.setItem('token', JSON.stringify(data.access_token))
+            await AsyncStorage.setItem('token', data.access_token)
             await AsyncStorage.setItem('user', JSON.stringify(data.user))
-            await AsyncStorage.setItem('isLoggdIn', JSON.stringify(true))
+            await AsyncStorage.setItem('isLoggdIn', String(true))
             await AsyncStorage.setItem('tokenExpiration', JSON.stringify(tokenExpiration))
-            configureAxiosHeaders(data.access_token)
             dispatch({ type: 'signIn', payload: data })
           }
         }).catch((err) => {
@@ -94,16 +87,13 @@ export const AuthProvider = ({ children }: any) => {
       const user = await AsyncStorage.getItem('user') ?? ''
       const data = {
         isLoggdIn: isLoggdIn ? JSON.parse(isLoggdIn) : false,
-        access_token: token ? JSON.parse(token) : '',
+        access_token: token,
         user: user ? JSON.parse(user) : {}
       }
       dispatch({
         type: 'signIn',
         payload: data
       })
-      if (data.isLoggdIn) {
-        configureAxiosHeaders(token)
-      }
     } catch (err) {
       console.log(err)
     }
@@ -126,11 +116,10 @@ export const AuthProvider = ({ children }: any) => {
       const { data }: IResLogin = response.data
       if (response.status === 201) {
         const tokenExpiration = addMinutes(new Date(), 1)
-        await AsyncStorage.setItem('token', JSON.stringify(data.access_token))
+        await AsyncStorage.setItem('token', data.access_token)
         await AsyncStorage.setItem('user', JSON.stringify(data.user))
         await AsyncStorage.setItem('isLoggdIn', JSON.stringify(true))
         await AsyncStorage.setItem('tokenExpiration', JSON.stringify(tokenExpiration))
-        configureAxiosHeaders(data.access_token)
         dispatch({ type: 'signIn', payload: data })
       }
     }).catch(error => {
