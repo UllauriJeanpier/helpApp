@@ -5,12 +5,12 @@ import axios, { AxiosRequestConfig } from 'axios'
 import { authReducer } from './authReducer'
 import { IDataLogin, IResLogin } from '../../interfaces/authInterfaces'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { isPast, format, parseISO, addMinutes } from 'date-fns'
+import { isPast, addMinutes } from 'date-fns'
 
 axios.defaults.baseURL = 'https://yanapakunpolicia.com'
 
 const configureAxiosHeaders = (token: string) => {
-  axios.defaults.headers.Authorization = `Bearer ${token}`
+  axios.defaults.headers.Authorization = 'Bearer ' + JSON.stringify(token)
 }
 
 export interface AuthState {
@@ -40,18 +40,33 @@ export const AuthProvider = ({ children }: any) => {
 
   const checkIfTokenNeedsRefresh = async () => {
     const token = await AsyncStorage.getItem('token') ?? ''
-    const tokenExpiration: string = await AsyncStorage.getItem('tokenExpiration') ?? ''
+    let tokenExpiration: string = await AsyncStorage.getItem('tokenExpiration') ?? ''
+    tokenExpiration = JSON.parse(tokenExpiration)
 
     if (token !== null && tokenExpiration !== null) {
-      let date = JSON.parse(tokenExpiration)
-      date = parseInt(date) * 1000
-      date = parseISO(date)
-      if (
-        isPast(
-          new Date(
-            date
-          )
-        )) {
+      if (isPast(new Date(tokenExpiration))) {
+        const config: AxiosRequestConfig = {
+          method: 'get',
+          url: 'https://yanapakunpolicia.com/auth/token',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+        console.log(axios.defaults.headers.Authorization)
+        axios(config).then(async (response) => {
+          const { data }: IResLogin = response.data
+          if (response.status === 201) {
+            const tokenExpiration = addMinutes(new Date(), 1)
+            await AsyncStorage.setItem('token', JSON.stringify(data.access_token))
+            await AsyncStorage.setItem('user', JSON.stringify(data.user))
+            await AsyncStorage.setItem('isLoggdIn', JSON.stringify(true))
+            await AsyncStorage.setItem('tokenExpiration', JSON.stringify(tokenExpiration))
+            configureAxiosHeaders(data.access_token)
+            dispatch({ type: 'signIn', payload: data })
+          }
+        }).catch((err) => {
+          console.log(err.message)
+        })
         console.log('renew')
       }
     }
@@ -60,10 +75,11 @@ export const AuthProvider = ({ children }: any) => {
   const logOut = async () => {
     try {
       await AsyncStorage.removeItem('token')
-      await AsyncStorage.removeItem('user', () => { })
+      await AsyncStorage.removeItem('user', () => {
+      })
       await AsyncStorage.removeItem('isLoggdIn')
 
-      getAuthState()
+      await getAuthState()
     } catch (e) {
       // remove error
       console.log(e)
@@ -72,7 +88,7 @@ export const AuthProvider = ({ children }: any) => {
 
   const getAuthState = async () => {
     try {
-      checkIfTokenNeedsRefresh()
+      await checkIfTokenNeedsRefresh()
       const token = await AsyncStorage.getItem('token') ?? ''
       const isLoggdIn = await AsyncStorage.getItem('isLoggdIn') ?? ''
       const user = await AsyncStorage.getItem('user') ?? ''
@@ -81,7 +97,10 @@ export const AuthProvider = ({ children }: any) => {
         access_token: token ? JSON.parse(token) : '',
         user: user ? JSON.parse(user) : {}
       }
-      dispatch({ type: 'signIn', payload: data })
+      dispatch({
+        type: 'signIn',
+        payload: data
+      })
       if (data.isLoggdIn) {
         configureAxiosHeaders(token)
       }
@@ -106,7 +125,7 @@ export const AuthProvider = ({ children }: any) => {
     axios(config).then(async (response) => {
       const { data }: IResLogin = response.data
       if (response.status === 201) {
-        const tokenExpiration = format(addMinutes(new Date(), 1444), 't')
+        const tokenExpiration = addMinutes(new Date(), 1)
         await AsyncStorage.setItem('token', JSON.stringify(data.access_token))
         await AsyncStorage.setItem('user', JSON.stringify(data.user))
         await AsyncStorage.setItem('isLoggdIn', JSON.stringify(true))
@@ -120,7 +139,7 @@ export const AuthProvider = ({ children }: any) => {
   }
 
   useEffect(() => {
-    getAuthState()
+    getAuthState().then(r => console.log('SESSION VALIDATE'))
   }, [])
 
   return (
@@ -135,6 +154,7 @@ export const AuthProvider = ({ children }: any) => {
 
   )
 }
+
 function totokenExpirationken (totokenExpirationken: any): string {
   throw new Error('Function not implemented.')
 }
