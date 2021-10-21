@@ -8,10 +8,10 @@ export const authReducer = (state: AuthState, action: AuthActions): AuthState =>
   switch (action.type) {
     case 'signIn':
       return {
-        ...state,
-        isLoggdIn: true,
+        isLoggdIn: action.payload.isLoggdIn,
         token: action.payload.access_token,
-        email: action.payload.user.email
+        email: action.payload.user.email,
+        pushToken: ''
       }
     default:
       return state

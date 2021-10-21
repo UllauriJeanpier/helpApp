@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 
 import {
-  SafeAreaView,
   View,
-  Image,
   Text, StyleSheet
 } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
@@ -11,6 +9,9 @@ import Notification from '../../assets/svg/notification.svg'
 import PoliceIcon from '../../assets/svg/Group 3.svg'
 import TabAlarma from '../../assets/svg/TabAlarma.svg'
 import { SCREEN } from '../../utils/constants'
+import Button from '../../components/Button'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { RootStackParams } from '../../navigation/StackNavigator'
 
 interface Slide {
   img: any
@@ -41,8 +42,19 @@ const renderItem = ({ description, img }: Slide) => {
   )
 }
 
-const TutorialScreen = () => {
+interface Props extends NativeStackScreenProps<RootStackParams, 'SignInScreen'>{}
+
+const TutorialScreen = ({ navigation }: Props) => {
   const [activeIndex, setActiveIndex] = useState(0)
+
+  const goDrawer = () => navigation.navigate('DrawerNavigator')
+
+  const renderButton = () => {
+    const goDrawer = () => navigation.navigate('DrawerNavigator')
+
+    if (activeIndex === 2) { return <Button title={ 'Iniciar' } action={ goDrawer } /> }
+    return null
+  }
 
   return (
     <View
@@ -58,6 +70,7 @@ const TutorialScreen = () => {
           setActiveIndex(index)
         } }
       />
+      { renderButton() }
       <Pagination
         dotsLength={ items.length }
         dotStyle={ styles.pagination }

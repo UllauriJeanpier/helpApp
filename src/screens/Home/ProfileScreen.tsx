@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, ScrollView, Text, View, SafeAreaView, TouchableOpacity } from 'react-native'
 
 import Header from '../../components/Header'
@@ -6,6 +6,28 @@ import Header from '../../components/Header'
 import UserPhoto from '../../assets/svg/User-yanapakun.svg'
 import Camera from '../../assets/svg/Camara.svg'
 import { SCREEN } from '../../utils/constants'
+import { getProfile } from '../../services/yanapakun/profile'
+
+interface UserData {
+  email: string
+}
+
+interface ProfileData {
+  age: number
+  dateBirth: string
+  district: string
+  document: string
+  emergencyNumber: string
+  firstName: string
+  gender: string
+  id: number
+  lastName: string
+  latitude: string
+  longitude: string
+  phone: string
+  updatedAt: string
+  user: UserData
+}
 
 interface Props {
   name: string
@@ -19,6 +41,35 @@ interface Props {
 }
 
 const ProfileScreen = ({ name, age, document, district, email, img, phone, phoneEmergency }: Props) => {
+  const [profile, setProfile] = useState<ProfileData>({
+    age: 0,
+    dateBirth: '',
+    district: '',
+    document: '',
+    emergencyNumber: '',
+    firstName: '',
+    gender: '',
+    id: 0,
+    lastName: '',
+    latitude: '',
+    longitude: '',
+    phone: '',
+    updatedAt: '',
+    user: {
+      email: ''
+    }
+  })
+  const fetchData = async () => {
+    try {
+      const response = await getProfile()
+      setProfile(response.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  useEffect(() => {
+    fetchData()
+  }, [])
   return (
     <SafeAreaView style={ styles.container }>
       <ScrollView>
@@ -40,31 +91,31 @@ const ProfileScreen = ({ name, age, document, district, email, img, phone, phone
             <View style={ styles.data }>
               <View style={ styles.dataUser }>
                 <Text style={ styles.fontText }>Nombre:</Text>
-                <Text style={ styles.fontText }>Marisol Ochoa Antaurco</Text>
+                <Text style={ styles.fontText }>{ profile.firstName } { profile.lastName }</Text>
               </View>
               <View style={ styles.dataUser }>
                 <Text style={ styles.fontText }>Edad:</Text>
-                <Text style={ styles.fontText }>42 años</Text>
+                <Text style={ styles.fontText }>{ profile.age } años</Text>
               </View>
               <View style={ styles.dataUser }>
                 <Text style={ styles.fontText }>DNI:</Text>
-                <Text style={ styles.fontText }>70659234</Text>
+                <Text style={ styles.fontText }>{ profile.document }</Text>
               </View>
               <View style={ styles.dataUser }>
                 <Text style={ styles.fontText }>Distrito:</Text>
-                <Text style={ styles.fontText }>San pedro</Text>
+                <Text style={ styles.fontText }>{ profile.district }</Text>
               </View>
               <View style={ styles.dataUser }>
                 <Text style={ styles.fontText }>E-mail:</Text>
-                <Text style={ styles.fontText }>marisolochoa@gmail.com</Text>
+                <Text style={ styles.fontText }>{ profile.user.email }</Text>
               </View>
               <View style={ styles.dataUser }>
                 <Text style={ styles.fontText }>Número de teléfono:</Text>
-                <Text style={ styles.fontText }>946845604</Text>
+                <Text style={ styles.fontText }>{ profile.phone }</Text>
               </View>
               <View style={ styles.lastDataUser }>
                 <Text style={ styles.fontText }>Teléfono de emergencia:</Text>
-                <Text style={ styles.fontText }>946845604</Text>
+                <Text style={ styles.fontText }>{ profile.emergencyNumber }</Text>
               </View>
             </View>
           </View>

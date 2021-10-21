@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 
-import React from 'react'
+import React, { useContext } from 'react'
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import NumberScreen from '../screens/Home/NumberScreen'
 import ProfileScreen from '../screens/Home/ProfileScreen'
 import DrawerLogo from '../assets/svg/Logo.svg'
 import { COLORS, FONTS } from '../utils/constants'
+import { AuthContext } from '../context/authContext'
 
 export type RootDrawerParams = {
   HomeScreen: undefined
@@ -43,6 +44,10 @@ const DrawerNavigator = () => {
 }
 
 const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
+  const { logOut } = useContext(AuthContext)
+  const logout = () => {
+    logOut()
+  }
   return (
 
     <View style={ styles.container }>
@@ -68,7 +73,7 @@ const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
         <BtnOption
           title={ 'Cerrar sesión' }
           isLogoutOption
-          action={ () => navigation.navigate('IndexScreen') } />
+          action={ logout } />
       </View>
     </View>
   )
