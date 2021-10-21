@@ -6,6 +6,7 @@ import { authReducer } from './authReducer'
 import { IDataLogin, IResLogin } from '../../interfaces/authInterfaces'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { isPast, addMinutes } from 'date-fns'
+import { refreshToken, userLogin } from '../../services/yanapakun/auth'
 
 export interface AuthState {
   isLoggdIn: boolean
@@ -39,17 +40,9 @@ export const AuthProvider = ({ children }: any) => {
 
     if (token !== null && tokenExpiration !== null) {
       if (isPast(new Date(tokenExpiration))) {
-        const config: AxiosRequestConfig = {
-          method: 'get',
-          url: 'https://yanapakunpolicia.com/auth/token',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          }
-        }
-        axios(config).then(async (response) => {
-          const { data }: IResLogin = response.data
+        refreshToken().then(async (response) => {
           if (response.status === 201) {
+            const { data }: IResLogin = response.data
             const tokenExpiration = addMinutes(new Date(), 1)
             await AsyncStorage.setItem('token', data.access_token)
             await AsyncStorage.setItem('user', JSON.stringify(data.user))
@@ -60,7 +53,6 @@ export const AuthProvider = ({ children }: any) => {
         }).catch((err) => {
           console.log(err.message)
         })
-        console.log('renew')
       }
     }
   }
@@ -68,13 +60,10 @@ export const AuthProvider = ({ children }: any) => {
   const logOut = async () => {
     try {
       await AsyncStorage.removeItem('token')
-      await AsyncStorage.removeItem('user', () => {
-      })
+      await AsyncStorage.removeItem('user')
       await AsyncStorage.removeItem('isLoggdIn')
-
       await getAuthState()
     } catch (e) {
-      // remove error
       console.log(e)
     }
   }
@@ -100,31 +89,20 @@ export const AuthProvider = ({ children }: any) => {
   }
 
   const signIn = async (payload: any) => {
-    const data = JSON.stringify({
-      email: payload.email,
-      password: payload.password
-    })
-    const config: AxiosRequestConfig = {
-      method: 'post',
-      url: 'https://yanapakunpolicia.com/auth/log-in',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      data: data
-    }
-    axios(config).then(async (response) => {
+    try {
+      const response = await userLogin(payload)
       const { data }: IResLogin = response.data
       if (response.status === 201) {
-        const tokenExpiration = addMinutes(new Date(), 1)
+        const tokenExpiration = addMinutes(new Date(), 1440)
         await AsyncStorage.setItem('token', data.access_token)
         await AsyncStorage.setItem('user', JSON.stringify(data.user))
         await AsyncStorage.setItem('isLoggdIn', JSON.stringify(true))
         await AsyncStorage.setItem('tokenExpiration', JSON.stringify(tokenExpiration))
         dispatch({ type: 'signIn', payload: data })
       }
-    }).catch(error => {
+    } catch (error) {
       console.log(error.message)
-    })
+    }
   }
 
   useEffect(() => {
@@ -142,8 +120,4 @@ export const AuthProvider = ({ children }: any) => {
     </AuthContext.Provider>
 
   )
-}
-
-function totokenExpirationken (totokenExpirationken: any): string {
-  throw new Error('Function not implemented.')
 }
