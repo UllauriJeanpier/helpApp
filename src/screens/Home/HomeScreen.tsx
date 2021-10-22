@@ -9,8 +9,10 @@ import { AuthContext } from '../../context/authContext'
 import { IPosition } from '../../interfaces/locationInterface'
 import { COLORS, FONTS, SCREEN } from '../../utils/constants'
 import { getCurrentLocation } from '../../utils/helpers'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { RootStackParams } from '../../navigation/StackNavigator'
 
-const HomeScreeen = () => {
+const HomeScreen = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false)
 
   const [location, setlocation] = useState<IPosition>()
@@ -30,11 +32,14 @@ const HomeScreeen = () => {
     // Guardar latitud y longitud
   }
 
+  const openMenu = () => {
+    navigation.toggleDrawer()
+  }
   /* const { signIn, authState } = useContext(AuthContext) */
 
   return (
     <>
-      <Header title='Yanapakun Policía' />
+      <Header title='Yanapakun Policía' icon={ 'menu' } action={ openMenu } />
       <View style={ styles.container }>
         <Text style={ styles.txtInfo }>
           Si necesitas ayuda de forma urgente,
@@ -60,16 +65,16 @@ const HomeScreeen = () => {
         isVisible={ modalVisible }
         hideAction={ () => setModalVisible(false) }
       />
-      {/* Modal Language  */}
+      { /* Modal Language  */ }
       <ModalLanguage
         isVisible={ modalLanguage }
-        hideAction={ () => setModalLanguage(false)}
+        hideAction={ () => setModalLanguage(false) }
       />
     </>
   )
 }
 
-export default HomeScreeen
+export default HomeScreen
 
 const styles = StyleSheet.create({
   container: {

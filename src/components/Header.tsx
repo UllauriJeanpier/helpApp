@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { COLORS, FONTS } from '../utils/constants'
 import { MaterialIcons } from '@expo/vector-icons'
 
@@ -13,7 +13,9 @@ interface Props {
 const Header = ({ title, icon, action }: Props) => {
   return (
     <View style={ styles.header }>
-      <MaterialIcons name={ icon } size={ 28 } onPress={ action } style={ styles.icon } />
+      <TouchableOpacity style={ styles.opacity } onPress={ action } >
+        <MaterialIcons name={ icon } size={ 28 } style={ styles.icon } />
+      </TouchableOpacity>
       <Text style={ styles.title }>{ title }</Text>
     </View>
   )
@@ -35,9 +37,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: FONTS.ProximaNovaBold
   },
-  icon: {
+  opacity: {
     position: 'absolute',
-    left: 25,
+    left: 25
+  },
+  icon: {
     color: 'white'
   }
 })
