@@ -7,6 +7,7 @@ import Header from '../../components/Header'
 import { RootStackParams } from '../../navigation/StackNavigator'
 import { COLORS, FONTS } from '../../utils/constants'
 import Button from '../../components/Button'
+import CustomSwitch from '../../components/CustomSwitch'
 
 interface Props extends NativeStackScreenProps<RootStackParams, 'SignInScreen'> {
 }
@@ -23,6 +24,13 @@ const IndexScreen = ({ navigation }: Props) => {
   return (
     <>
       <View style={ styles.container }>
+        <CustomSwitch
+          option1={ 'Castellano' }
+          option2={ 'Quechua' }
+          onSelectSwitch={ (val) => {
+            console.log(val)
+          } }
+        />
         <Alarma width={ 150 } height={ 150 }/>
         <View style={ styles.btnContainer }>
           <Button title={ 'Iniciar sesión' } action={ goToSignIn } customStyles={ styles.btn }/>
@@ -62,7 +70,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     flexDirection: 'row',
     paddingVertical: 15
-    // backgroundColor: COLORS.PRIMARY,
   },
   textContainer: {
     flex: 1,
@@ -72,9 +79,5 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.ProximaNovaBold,
     color: COLORS.PRIMARY,
     fontSize: 14
-  },
-  textBoldFooter: {
-    fontFamily: FONTS.ProximaNovaRegular,
-    color: COLORS.PRIMARY
   }
 })
