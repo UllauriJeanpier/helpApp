@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import Checkbox from 'expo-checkbox'
@@ -17,41 +16,89 @@ import { RootStackParams } from '../../navigation/StackNavigator'
 import InputForm from '../../components/InputForm'
 import { COLORS } from '../../utils/constants'
 import Button from '../../components/Button'
+import { userSignUp } from '../../services/yanapakun/sigup'
 
-interface Props extends NativeStackScreenProps<RootStackParams, 'SignUpScreen'>{}
+interface Props extends NativeStackScreenProps<RootStackParams, 'SignUpScreen'> {
+}
 
 const SignUpScreen = ({ navigation }: Props) => {
   const [names, setNames] = useState('')
   const [validateName, setValidateName] = useState(false)
+
   const [surnames, setSurnames] = useState('')
   const [validateSurname, setValidateSurname] = useState(false)
+
   const [age, setAge] = useState('')
   const [validateAge, setValidateAge] = useState(false)
+
   const [DNI, setDNI] = useState('')
   const [validateDNI, setValidateDNI] = useState(false)
+
   const [distrit, setDistrit] = useState('')
   const [validateDistrit, setValidateDistrit] = useState(false)
+
   const [email, setEmail] = useState('')
   const [validateEmail, setValidateEmail] = useState(false)
+
   const [password, setPassword] = useState('')
   const [validatePassword, setValidatePassword] = useState(false)
+
   const [confirmPassword, setConfirmPassword] = useState('')
   const [validateConfirmPassword, setValidateConfirmPassword] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
 
+  const [phone, setPhone] = useState('')
+  const [validatePhone, setValidatePhone] = useState(false)
+
+  const [emergencyNumber, setEmergencyNumber] = useState('')
+  const [validateEmergencyNumber, setValidateEmergencyNumber] = useState(false)
+
   const goToSignIn = () => navigation.navigate('SignInScreen')
 
-  const registro = () => {
-    console.log('Este es un registro')
+  const registro = async () => {
+    try {
+      // {
+      //   "email": "string",
+      //   "password": "string",
+      //   "roles": [
+      //   "admin"
+      // ],
+      //   "isActive": true,
+      //   "firstName": "string",
+      //   "lastName": "string",
+      //   "age": 0,
+      //   "phone": "string",
+      //   "emergencyNumber": "string",
+      //   "document": "string",
+      //   "district": "string",
+      //   "gender": "string",
+      //   "dateBirth": "2021-10-21T16:09:04.612Z",
+      //   "latitude": "string",
+      //   "longitude": "string"
+      // }
+      const response = await userSignUp({
+        email: email,
+        password: password,
+        roles: ['user'],
+        isActive: true,
+        firstName: names,
+        lastName: surnames,
+        age: age,
+        phone: phone,
+        emergencyNumber: emergencyNumber
+      })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
     <ScrollView>
-      <Header title="Regístrate"/>
+      <Header title="Regístrate" icon="keyboard-arrow-left" action={ () => navigation.navigate('IndexScreen') }/>
       <View style={ styles.container }>
         <InputForm
           label={ 'Nombres:' }
-          placeholder={ 'Nombres' }
+          placeholder={ '' }
           valueInput={ names }
           setValueInput={ setNames }
           validateInput={ validateName }
@@ -61,7 +108,7 @@ const SignUpScreen = ({ navigation }: Props) => {
         />
         <InputForm
           label={ 'Apellidos:' }
-          placeholder={ 'Apellidos' }
+          placeholder={ '' }
           valueInput={ surnames }
           setValueInput={ setSurnames }
           validateInput={ validateSurname }
@@ -71,18 +118,18 @@ const SignUpScreen = ({ navigation }: Props) => {
         />
         <InputForm
           label={ 'Edad:' }
-          placeholder={ 'Edad' }
+          placeholder={ '' }
           valueInput={ age }
           setValueInput={ setAge }
           validateInput={ validateAge }
-          keyboardType= 'numeric'
+          keyboardType="numeric"
           setValidateInput={ setValidateAge }
           functionValidation={ handleAge }
           errorMessage={ 'Escribe una edad válida' }
         />
         <InputForm
           label={ 'Número de DNI:' }
-          placeholder={ 'DNI' }
+          placeholder={ '' }
           valueInput={ DNI }
           setValueInput={ setDNI }
           validateInput={ validateDNI }
@@ -92,7 +139,7 @@ const SignUpScreen = ({ navigation }: Props) => {
         />
         <InputForm
           label={ 'Distrito:' }
-          placeholder={ 'Distrito' }
+          placeholder={ '' }
           valueInput={ distrit }
           setValueInput={ setDistrit }
           validateInput={ validateDistrit }
@@ -103,7 +150,7 @@ const SignUpScreen = ({ navigation }: Props) => {
 
         <InputForm
           label={ 'Correo electrónico:' }
-          placeholder={ 'Correo' }
+          placeholder={ '' }
           valueInput={ email }
           setValueInput={ setEmail }
           validateInput={ validateEmail }
@@ -113,8 +160,30 @@ const SignUpScreen = ({ navigation }: Props) => {
         />
 
         <InputForm
+          label={ 'Número de teléfono:' }
+          valueInput={ email }
+          setValueInput={ setEmail }
+          validateInput={ validateEmail }
+          setValidateInput={ setValidateEmail }
+          functionValidation={ handleEmail }
+          errorMessage={ 'Escribe un teléfono válido' }
+          placeholder={ '' }
+        />
+
+        <InputForm
+          label={ 'Teléfono de emergencia:' }
+          valueInput={ emergencyNumber }
+          setValueInput={ setEmergencyNumber }
+          validateInput={ validateEmergencyNumber }
+          setValidateInput={ setValidateEmergencyNumber }
+          functionValidation={ handleEmail }
+          errorMessage={ 'Escribe un teléfono válido' }
+          placeholder={ '' }
+        />
+
+        <InputForm
           label={ 'Contraseña:' }
-          placeholder={ 'Contraseña' }
+          placeholder={ '' }
           valueInput={ password }
           setValueInput={ setPassword }
           validateInput={ validatePassword }
@@ -125,7 +194,7 @@ const SignUpScreen = ({ navigation }: Props) => {
         />
         <InputForm
           label={ 'Confirmar contraseña:' }
-          placeholder={ 'Confirmar contraseña' }
+          placeholder={ '' }
           valueInput={ confirmPassword }
           setValueInput={ setConfirmPassword }
           validateInput={ validateConfirmPassword }
@@ -143,9 +212,9 @@ const SignUpScreen = ({ navigation }: Props) => {
           />
           <Text style={ styles.paragraph }>Acepto términos, condiciones y politicas</Text>
         </View>
-        <Button title='Regístrate' action={ registro } />
+        <Button title="Registrarse" action={ registro }/>
         <Text style={ styles.txtInf }>¿Ya estás registrado?{ ' ' }
-          <Text style={ styles.boldTxtInfo } onPress={ goToSignIn } >
+          <Text style={ styles.boldTxtInfo } onPress={ goToSignIn }>
             Iniciar Sesión
           </Text>
         </Text>
@@ -164,18 +233,19 @@ const styles = StyleSheet.create({
   checkSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 10
+    marginVertical: 30.5
   },
   paragraph: {
     fontSize: 13,
-    color: COLORS.PRIMARY,
-    textAlign: 'justify'
+    color: COLORS.TEXT_COLOR,
+    textAlign: 'justify',
+    textDecorationLine: 'underline'
   },
   checkbox: {},
   txtInf: {
-    marginVertical: 15,
-    color: COLORS.PRIMARY,
-    fontSize: 15,
+    marginVertical: 28,
+    color: COLORS.TEXT_COLOR,
+    fontSize: 16,
     textAlign: 'center'
   },
   boldTxtInfo: {

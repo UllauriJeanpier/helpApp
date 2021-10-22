@@ -8,7 +8,8 @@ import { RootStackParams } from '../../navigation/StackNavigator'
 import { COLORS, FONTS } from '../../utils/constants'
 import Button from '../../components/Button'
 
-interface Props extends NativeStackScreenProps<RootStackParams, 'SignInScreen'> {}
+interface Props extends NativeStackScreenProps<RootStackParams, 'SignInScreen'> {
+}
 
 const IndexScreen = ({ navigation }: Props) => {
   const goToSignIn = () => {
@@ -24,7 +25,7 @@ const IndexScreen = ({ navigation }: Props) => {
       <View style={ styles.container }>
         <Alarma width={ 150 } height={ 150 }/>
         <View style={ styles.btnContainer }>
-          <Button title={ 'Iniciar sesión' } action={ goToSignIn }/>
+          <Button title={ 'Iniciar sesión' } action={ goToSignIn } customStyles={ styles.btn }/>
           <Button title={ 'Regístrate' } action={ goToSignUp }/>
         </View>
       </View>
@@ -32,10 +33,7 @@ const IndexScreen = ({ navigation }: Props) => {
         <LogoPolicia width={ '35%' } height={ '100%' } /* style={ styles.logo } *//>
         <View style={ styles.textContainer }>
           <Text style={ styles.textFooter }>
-            Aplicativo respaldado por la Policia Nacional del Peru
-          </Text>
-          <Text style={ styles.textBoldFooter }>
-            Comisaria de Huancavelica
+            Aplicativo pensado en la seguridad de los ciudadanos por una ciudad más segura
           </Text>
         </View>
       </View>
@@ -46,6 +44,9 @@ const IndexScreen = ({ navigation }: Props) => {
 export default IndexScreen
 
 const styles = StyleSheet.create({
+  btn: {
+    marginVertical: -7
+  },
   container: {
     flex: 5,
     paddingHorizontal: 25,
@@ -69,7 +70,8 @@ const styles = StyleSheet.create({
   },
   textFooter: {
     fontFamily: FONTS.ProximaNovaBold,
-    color: COLORS.PRIMARY
+    color: COLORS.PRIMARY,
+    fontSize: 14
   },
   textBoldFooter: {
     fontFamily: FONTS.ProximaNovaRegular,

@@ -8,7 +8,6 @@ import DrawerNavigator from './DrawerNavigator'
 import SignInScreen from '../screens/Auth/SignInScreen'
 import TutorialScreen from '../screens/Tutorial/TutorialScreen'
 import { AuthContext, authInitialState } from '../context/authContext'
-import { authReducer } from '../context/authContext/authReducer'
 
 export type RootStackParams = {
   IndexScreen: undefined

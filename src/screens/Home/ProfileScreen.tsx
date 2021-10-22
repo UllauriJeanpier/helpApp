@@ -7,6 +7,7 @@ import UserPhoto from '../../assets/svg/User-yanapakun.svg'
 import Camera from '../../assets/svg/Camara.svg'
 import { SCREEN } from '../../utils/constants'
 import { getProfile } from '../../services/yanapakun/profile'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface UserData {
   email: string

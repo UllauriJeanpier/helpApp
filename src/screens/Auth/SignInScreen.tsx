@@ -21,13 +21,15 @@ const SignInScreen = ({ navigation }: Props) => {
 
   const goToSignUp = () => navigation.navigate('SignUpScreen')
 
+  const goToIndex = () => navigation.navigate('IndexScreen')
+
   const login = () => {
     signIn({ email, password })
   }
 
   return (
     <ScrollView>
-      <Header title="Iniciar sesión"/>
+      <Header title="Iniciar sesión" icon='keyboard-arrow-left' action={ goToIndex } />
       <View style={ styles.container }>
         <View style={ styles.inputsContainer }>
           <InputForm
@@ -52,12 +54,12 @@ const SignInScreen = ({ navigation }: Props) => {
             isPassword
           />
         </View>
-        <View style={ styles.sesionContainer }>
+        <View style={ styles.sessionContainer }>
           <Text style={ styles.txtInf }>Olvidaste tu contraseña</Text>
           <Button title={ 'Iniciar sesión' } action={ login } />
-          <Text style={ styles.txtInf }>¿No estás registrado?{ ' ' }
+          <Text style={ [styles.txtInf, styles.decorationNone] }>¿Aún no estás registrado?{ ' ' }
             <Text style={ styles.boldTxtInfo } onPress={ goToSignUp } >
-              Regístrate
+              Regístrate aquí
             </Text>
           </Text>
         </View>
@@ -71,24 +73,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 25,
-    paddingTop: 75,
+    paddingVertical: 100,
     justifyContent: 'space-evenly'
   },
   inputsContainer: {
-    height: '50%',
     justifyContent: 'center'
   },
-  sesionContainer: {
+  sessionContainer: {
     height: '50%'
   },
   txtInf: {
-    marginVertical: 15,
-    color: COLORS.PRIMARY,
+    paddingVertical: 20,
+    color: COLORS.TEXT_COLOR,
     fontSize: 15,
-    textAlign: 'center'
+    textAlign: 'center',
+    textDecorationLine: 'underline'
+  },
+  decorationNone: {
+    textDecorationLine: 'none'
   },
   boldTxtInfo: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textDecorationLine: 'underline'
   }
 })
 
