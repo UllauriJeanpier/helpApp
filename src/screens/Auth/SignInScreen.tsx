@@ -1,6 +1,6 @@
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import Button from '../../components/Button'
 import Header from '../../components/Header'
@@ -9,10 +9,12 @@ import { AuthContext } from '../../context/authContext'
 import { RootStackParams } from '../../navigation/StackNavigator'
 import { COLORS } from '../../utils/constants'
 import { handleEmail, handlePassword } from '../../utils/validateFuntions'
+import Loading from '../../components/Loading'
 
 interface Props extends NativeStackScreenProps<RootStackParams, 'SignInScreen'>{}
 
 const SignInScreen = ({ navigation }: Props) => {
+  const [loading, setLoading] = useState(true)
   const [email, setEmail] = useState('')
   const [validateEmail, setValidateEmail] = useState(false)
   const [password, setPassword] = useState('')
@@ -23,49 +25,55 @@ const SignInScreen = ({ navigation }: Props) => {
 
   const goToIndex = () => navigation.navigate('IndexScreen')
 
-  const login = () => {
-    signIn({ email, password })
+  const login = async () => {
+    setLoading(true)
+    await signIn({ email, password })
+    setLoading(false)
   }
 
+  useEffect(() => {
+    setLoading(false)
+  }, [])
   return (
-    <ScrollView>
-      <Header title="Iniciar sesión" icon='keyboard-arrow-left' action={ goToIndex } />
-      <View style={ styles.container }>
-        <View style={ styles.inputsContainer }>
-          <InputForm
-            label={ 'Correo electrónico:' }
-            placeholder={ 'Escriba su correo electrónico' }
-            valueInput={ email }
-            setValueInput={ setEmail }
-            validateInput={ validateEmail }
-            setValidateInput={ setValidateEmail }
-            functionValidation={ handleEmail }
-            errorMessage={ 'Escribe un correo válido' }
+    <Loading loading={ loading } >
+      <ScrollView>
+        <Header title="Iniciar sesión" icon='keyboard-arrow-left' action={ goToIndex } />
+        <View style={ styles.container }>
+          <View style={ styles.inputsContainer }>
+            <InputForm
+              label={ 'Correo electrónico:' }
+              placeholder={ 'Escriba su correo electrónico' }
+              valueInput={ email }
+              setValueInput={ setEmail }
+              validateInput={ validateEmail }
+              setValidateInput={ setValidateEmail }
+              functionValidation={ handleEmail }
+              errorMessage={ 'Escribe un correo válido' }
           />
-          <InputForm
-            label={ 'Contraseña:' }
-            placeholder={ 'Escriba su contraseña' }
-            valueInput={ password }
-            setValueInput={ setPassword }
-            validateInput={ validatePassword }
-            setValidateInput={ setValidatePassword }
-            functionValidation={ handlePassword }
-            errorMessage={ 'Escribe una contraseña válida' }
-            isPassword
+            <InputForm
+              label={ 'Contraseña:' }
+              placeholder={ 'Escriba su contraseña' }
+              valueInput={ password }
+              setValueInput={ setPassword }
+              validateInput={ validatePassword }
+              setValidateInput={ setValidatePassword }
+              functionValidation={ handlePassword }
+              errorMessage={ 'Escribe una contraseña válida' }
+              isPassword
           />
-        </View>
-        <View style={ styles.sessionContainer }>
-          <Text style={ styles.txtInf }>Olvidaste tu contraseña</Text>
-          <Button title={ 'Iniciar sesión' } action={ login } />
-          <Text style={ [styles.txtInf, styles.decorationNone] }>¿Aún no estás registrado?{ ' ' }
-            <Text style={ styles.boldTxtInfo } onPress={ goToSignUp } >
-              Regístrate aquí
+          </View>
+          <View style={ styles.sessionContainer }>
+            <Text style={ styles.txtInf }>Olvidaste tu contraseña</Text>
+            <Button title={ 'Iniciar sesión' } action={ login } />
+            <Text style={ [styles.txtInf, styles.decorationNone] }>¿Aún no estás registrado?{ ' ' }
+              <Text style={ styles.boldTxtInfo } onPress={ goToSignUp } >
+                Regístrate aquí
+              </Text>
             </Text>
-          </Text>
+          </View>
         </View>
-
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </Loading>
   )
 }
 

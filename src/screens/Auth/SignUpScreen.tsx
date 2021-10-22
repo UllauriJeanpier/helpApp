@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -7,7 +7,7 @@ import {
   handleName,
   handleAge,
   handleDNI,
-  handleDistrit,
+  handleDistrict,
   handleEmail,
   handlePassword
 } from '../../utils/validateFuntions'
@@ -17,11 +17,14 @@ import InputForm from '../../components/InputForm'
 import { COLORS } from '../../utils/constants'
 import Button from '../../components/Button'
 import { userSignUp } from '../../services/yanapakun/sigup'
+import Loading from '../../components/Loading'
 
 interface Props extends NativeStackScreenProps<RootStackParams, 'SignUpScreen'> {
 }
 
 const SignUpScreen = ({ navigation }: Props) => {
+  const [loading, setLoading] = useState(true)
+
   const [names, setNames] = useState('')
   const [validateName, setValidateName] = useState(false)
 
@@ -34,8 +37,8 @@ const SignUpScreen = ({ navigation }: Props) => {
   const [DNI, setDNI] = useState('')
   const [validateDNI, setValidateDNI] = useState(false)
 
-  const [distrit, setDistrit] = useState('')
-  const [validateDistrit, setValidateDistrit] = useState(false)
+  const [district, setDistrict] = useState('')
+  const [validateDistrict, setValidateDistrict] = useState(false)
 
   const [email, setEmail] = useState('')
   const [validateEmail, setValidateEmail] = useState(false)
@@ -57,169 +60,167 @@ const SignUpScreen = ({ navigation }: Props) => {
 
   const registro = async () => {
     try {
-      // {
-      //   "email": "string",
-      //   "password": "string",
-      //   "roles": [
-      //   "admin"
-      // ],
-      //   "isActive": true,
-      //   "firstName": "string",
-      //   "lastName": "string",
-      //   "age": 0,
-      //   "phone": "string",
-      //   "emergencyNumber": "string",
-      //   "document": "string",
-      //   "district": "string",
-      //   "gender": "string",
-      //   "dateBirth": "2021-10-21T16:09:04.612Z",
-      //   "latitude": "string",
-      //   "longitude": "string"
-      // }
-      const response = await userSignUp({
+      setLoading(true)
+      await userSignUp({
         email: email,
         password: password,
         roles: ['user'],
         isActive: true,
         firstName: names,
         lastName: surnames,
-        age: age,
+        age: parseInt(age),
         phone: phone,
-        emergencyNumber: emergencyNumber
+        emergencyNumber: emergencyNumber,
+        document: DNI,
+        district: district,
+        gender: '',
+        dateBirth: new Date(),
+        latitude: '',
+        longitude: ''
       })
+      setLoading(false)
+      goToSignIn()
     } catch (e) {
       console.log(e)
+      setLoading(false)
     }
   }
 
+  useEffect(() => {
+    setLoading(false)
+  }, [])
+
   return (
-    <ScrollView>
-      <Header title="Regístrate" icon="keyboard-arrow-left" action={ () => navigation.navigate('IndexScreen') }/>
-      <View style={ styles.container }>
-        <InputForm
-          label={ 'Nombres:' }
-          placeholder={ '' }
-          valueInput={ names }
-          setValueInput={ setNames }
-          validateInput={ validateName }
-          setValidateInput={ setValidateName }
-          functionValidation={ handleName }
-          errorMessage={ 'Escribe un nombre válido' }
+    <Loading loading={ loading }>
+      <ScrollView>
+        <Header title="Regístrate" icon="keyboard-arrow-left" action={ () => navigation.navigate('IndexScreen') }/>
+        <View style={ styles.container }>
+          <InputForm
+            label={ 'Nombres:' }
+            placeholder={ '' }
+            valueInput={ names }
+            setValueInput={ setNames }
+            validateInput={ validateName }
+            setValidateInput={ setValidateName }
+            functionValidation={ handleName }
+            errorMessage={ 'Escribe un nombre válido' }
         />
-        <InputForm
-          label={ 'Apellidos:' }
-          placeholder={ '' }
-          valueInput={ surnames }
-          setValueInput={ setSurnames }
-          validateInput={ validateSurname }
-          setValidateInput={ setValidateSurname }
-          functionValidation={ handleName }
-          errorMessage={ 'Escribe un apellido válido' }
+          <InputForm
+            label={ 'Apellidos:' }
+            placeholder={ '' }
+            valueInput={ surnames }
+            setValueInput={ setSurnames }
+            validateInput={ validateSurname }
+            setValidateInput={ setValidateSurname }
+            functionValidation={ handleName }
+            errorMessage={ 'Escribe un apellido válido' }
         />
-        <InputForm
-          label={ 'Edad:' }
-          placeholder={ '' }
-          valueInput={ age }
-          setValueInput={ setAge }
-          validateInput={ validateAge }
-          keyboardType="numeric"
-          setValidateInput={ setValidateAge }
-          functionValidation={ handleAge }
-          errorMessage={ 'Escribe una edad válida' }
+          <InputForm
+            label={ 'Edad:' }
+            placeholder={ '' }
+            valueInput={ age }
+            setValueInput={ setAge }
+            validateInput={ validateAge }
+            keyboardType="numeric"
+            setValidateInput={ setValidateAge }
+            functionValidation={ handleAge }
+            errorMessage={ 'Escribe una edad válida' }
         />
-        <InputForm
-          label={ 'Número de DNI:' }
-          placeholder={ '' }
-          valueInput={ DNI }
-          setValueInput={ setDNI }
-          validateInput={ validateDNI }
-          setValidateInput={ setValidateDNI }
-          functionValidation={ handleDNI }
-          errorMessage={ 'Escribe un DNI válido' }
+          <InputForm
+            label={ 'Número de DNI:' }
+            placeholder={ '' }
+            valueInput={ DNI }
+            setValueInput={ setDNI }
+            validateInput={ validateDNI }
+            setValidateInput={ setValidateDNI }
+            functionValidation={ handleDNI }
+            errorMessage={ 'Escribe un DNI válido' }
         />
-        <InputForm
-          label={ 'Distrito:' }
-          placeholder={ '' }
-          valueInput={ distrit }
-          setValueInput={ setDistrit }
-          validateInput={ validateDistrit }
-          setValidateInput={ setValidateDistrit }
-          functionValidation={ handleDistrit }
-          errorMessage={ 'Escribe un distrito válido' }
-        />
-
-        <InputForm
-          label={ 'Correo electrónico:' }
-          placeholder={ '' }
-          valueInput={ email }
-          setValueInput={ setEmail }
-          validateInput={ validateEmail }
-          setValidateInput={ setValidateEmail }
-          functionValidation={ handleEmail }
-          errorMessage={ 'Escribe un correo válido' }
+          <InputForm
+            label={ 'Distrito:' }
+            placeholder={ '' }
+            valueInput={ district }
+            setValueInput={ setDistrict }
+            validateInput={ validateDistrict }
+            setValidateInput={ setValidateDistrict }
+            functionValidation={ handleDistrict }
+            errorMessage={ 'Escribe un distrito válido' }
         />
 
-        <InputForm
-          label={ 'Número de teléfono:' }
-          valueInput={ email }
-          setValueInput={ setEmail }
-          validateInput={ validateEmail }
-          setValidateInput={ setValidateEmail }
-          functionValidation={ handleEmail }
-          errorMessage={ 'Escribe un teléfono válido' }
-          placeholder={ '' }
+          <InputForm
+            label={ 'Correo electrónico:' }
+            placeholder={ '' }
+            valueInput={ email }
+            setValueInput={ setEmail }
+            validateInput={ validateEmail }
+            setValidateInput={ setValidateEmail }
+            functionValidation={ handleEmail }
+            errorMessage={ 'Escribe un correo válido' }
         />
 
-        <InputForm
-          label={ 'Teléfono de emergencia:' }
-          valueInput={ emergencyNumber }
-          setValueInput={ setEmergencyNumber }
-          validateInput={ validateEmergencyNumber }
-          setValidateInput={ setValidateEmergencyNumber }
-          functionValidation={ handleEmail }
-          errorMessage={ 'Escribe un teléfono válido' }
-          placeholder={ '' }
+          <InputForm
+            label={ 'Número de teléfono:' }
+            valueInput={ phone }
+            setValueInput={ setPhone }
+            validateInput={ validatePhone }
+            setValidateInput={ setValidatePhone }
+            functionValidation={ handleName }
+            errorMessage={ 'Escribe un teléfono válido' }
+            placeholder={ '' }
         />
 
-        <InputForm
-          label={ 'Contraseña:' }
-          placeholder={ '' }
-          valueInput={ password }
-          setValueInput={ setPassword }
-          validateInput={ validatePassword }
-          setValidateInput={ setValidatePassword }
-          functionValidation={ handlePassword }
-          errorMessage={ 'Escribe una contraseña válida' }
-          isPassword
+          <InputForm
+            label={ 'Teléfono de emergencia:' }
+            valueInput={ emergencyNumber }
+            setValueInput={ setEmergencyNumber }
+            validateInput={ validateEmergencyNumber }
+            setValidateInput={ setValidateEmergencyNumber }
+            functionValidation={ handleName }
+            errorMessage={ 'Escribe un teléfono válido' }
+            placeholder={ '' }
         />
-        <InputForm
-          label={ 'Confirmar contraseña:' }
-          placeholder={ '' }
-          valueInput={ confirmPassword }
-          setValueInput={ setConfirmPassword }
-          validateInput={ validateConfirmPassword }
-          setValidateInput={ setValidateConfirmPassword }
-          functionValidation={ handlePassword }
-          errorMessage={ 'Escribe una contraseña válida' }
-          isPassword
+
+          <InputForm
+            label={ 'Contraseña:' }
+            placeholder={ '' }
+            valueInput={ password }
+            setValueInput={ setPassword }
+            validateInput={ validatePassword }
+            setValidateInput={ setValidatePassword }
+            functionValidation={ handlePassword }
+            errorMessage={ 'Escribe una contraseña válida' }
+            isPassword
         />
-        <View style={ styles.checkSection }>
-          <Checkbox
-            style={ styles.checkbox }
-            value={ isChecked }
-            onValueChange={ setIsChecked }
-            color={ COLORS.PRIMARY }
+          <InputForm
+            label={ 'Confirmar contraseña:' }
+            placeholder={ '' }
+            valueInput={ confirmPassword }
+            setValueInput={ setConfirmPassword }
+            validateInput={ validateConfirmPassword }
+            setValidateInput={ setValidateConfirmPassword }
+            functionValidation={ handlePassword }
+            errorMessage={ 'Escribe una contraseña válida' }
+            isPassword
+        />
+          <View style={ styles.checkSection }>
+            <Checkbox
+              style={ styles.checkbox }
+              value={ isChecked }
+              onValueChange={ setIsChecked }
+              color={ COLORS.PRIMARY }
           />
-          <Text style={ styles.paragraph }>Acepto términos, condiciones y politicas</Text>
-        </View>
-        <Button title="Registrarse" action={ registro }/>
-        <Text style={ styles.txtInf }>¿Ya estás registrado?{ ' ' }
-          <Text style={ styles.boldTxtInfo } onPress={ goToSignIn }>
-            Iniciar Sesión
+            <Text style={ styles.paragraph }>Acepto términos, condiciones y politicas</Text>
+          </View>
+          <Button title="Registrarse" action={ registro }/>
+          <Text style={ styles.txtInf }>¿Ya estás registrado?{ ' ' }
+            <Text style={ styles.boldTxtInfo } onPress={ goToSignIn }>
+              Iniciar Sesión
+            </Text>
           </Text>
-        </Text>
-      </View>
-    </ScrollView>
+        </View>
+      </ScrollView>
+    </Loading>
+
   )
 }
 
