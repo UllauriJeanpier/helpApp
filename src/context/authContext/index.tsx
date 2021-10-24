@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-
 import React, { createContext, useEffect, useReducer } from 'react'
-import axios, { AxiosRequestConfig } from 'axios'
 import { authReducer } from './authReducer'
 import { IDataLogin, IResLogin } from '../../interfaces/authInterfaces'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -9,7 +7,7 @@ import { isPast, addMinutes } from 'date-fns'
 import { refreshToken, userLogin } from '../../services/yanapakun/auth'
 
 export interface AuthState {
-  isLoggdIn: boolean
+  isLogIn: boolean
   token?: string
   email?: string
   pushToken?: string
@@ -17,7 +15,7 @@ export interface AuthState {
 
 // initial State
 export const authInitialState: AuthState = {
-  isLoggdIn: false
+  isLogIn: false
 }
 
 export interface AuthContextProps {
@@ -46,7 +44,7 @@ export const AuthProvider = ({ children }: any) => {
             const tokenExpiration = addMinutes(new Date(), 1)
             await AsyncStorage.setItem('token', data.access_token)
             await AsyncStorage.setItem('user', JSON.stringify(data.user))
-            await AsyncStorage.setItem('isLoggdIn', String(true))
+            await AsyncStorage.setItem('isLogIn', String(true))
             await AsyncStorage.setItem('tokenExpiration', JSON.stringify(tokenExpiration))
             dispatch({ type: 'signIn', payload: data })
           }
@@ -61,7 +59,7 @@ export const AuthProvider = ({ children }: any) => {
     try {
       await AsyncStorage.removeItem('token')
       await AsyncStorage.removeItem('user')
-      await AsyncStorage.removeItem('isLoggdIn')
+      await AsyncStorage.removeItem('isLogIn')
       await getAuthState()
     } catch (e) {
       console.log(e)
@@ -72,10 +70,10 @@ export const AuthProvider = ({ children }: any) => {
     try {
       await checkIfTokenNeedsRefresh()
       const token = await AsyncStorage.getItem('token') ?? ''
-      const isLoggdIn = await AsyncStorage.getItem('isLoggdIn') ?? ''
+      const isLogIn = await AsyncStorage.getItem('isLogIn') ?? ''
       const user = await AsyncStorage.getItem('user') ?? ''
       const data = {
-        isLoggdIn: isLoggdIn ? JSON.parse(isLoggdIn) : false,
+        isLogIn: isLogIn ? JSON.parse(isLogIn) : false,
         access_token: token,
         user: user ? JSON.parse(user) : {}
       }
@@ -96,7 +94,7 @@ export const AuthProvider = ({ children }: any) => {
         const tokenExpiration = addMinutes(new Date(), 1440)
         await AsyncStorage.setItem('token', data.access_token)
         await AsyncStorage.setItem('user', JSON.stringify(data.user))
-        await AsyncStorage.setItem('isLoggdIn', JSON.stringify(true))
+        await AsyncStorage.setItem('isLogIn', JSON.stringify(true))
         await AsyncStorage.setItem('tokenExpiration', JSON.stringify(tokenExpiration))
         dispatch({ type: 'signIn', payload: data })
       }

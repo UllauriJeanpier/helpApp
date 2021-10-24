@@ -26,9 +26,13 @@ const SignInScreen = ({ navigation }: Props) => {
   const goToIndex = () => navigation.navigate('IndexScreen')
 
   const login = async () => {
-    setLoading(true)
-    await signIn({ email, password })
-    setLoading(false)
+    try {
+      setLoading(true)
+      await signIn({ email, password })
+    } catch (e) {
+      console.log(e)
+      setLoading(false)
+    }
   }
 
   useEffect(() => {

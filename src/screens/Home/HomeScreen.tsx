@@ -1,23 +1,40 @@
-import React, { useContext, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Alarma from '../../assets/svg/Alarma5.svg'
 import Info from '../../assets/svg/info.svg'
 import Header from '../../components/Header'
 import ModalInfo from '../../components/ModalInfo'
 import ModalLanguage from '../../components/ModalLanguage'
-import { AuthContext } from '../../context/authContext'
 import { IPosition } from '../../interfaces/locationInterface'
 import { COLORS, FONTS, SCREEN } from '../../utils/constants'
 import { getCurrentLocation } from '../../utils/helpers'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParams } from '../../navigation/StackNavigator'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { updatePartialUser } from '../../services/yanapakun/user'
+import { IUserLogin } from '../../interfaces/authInterfaces'
+import { saveCallHelp } from '../../services/yanapakun/callHelp'
 
 const HomeScreen = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false)
+  const [location, setLocation] = useState<IPosition>()
+  const [modalLanguage, setModalLanguage] = useState(false)
 
-  const [location, setlocation] = useState<IPosition>()
-
-  const [modalLanguage, setModalLanguage] = useState(true)
+  const saveTokenNotification = async () => {
+    try {
+      const user = await AsyncStorage.getItem('user')
+      const token = await AsyncStorage.getItem('token') ?? ''
+      let dataUser: IUserLogin
+      if (typeof user === 'string') {
+        dataUser = JSON.parse(user)
+        if (token ?? user) {
+          await updatePartialUser(dataUser?.id, {
+            notificationToken: token
+          })
+        }
+      }
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
 
   const getLocation = async () => {
     const { status, position } = await getCurrentLocation()
@@ -26,16 +43,18 @@ const HomeScreen = ({ navigation }: any) => {
       setModalVisible(true)
       return
     }
-    position && setlocation(position)
+    position && setLocation(position)
     console.log(location)
-
     // Guardar latitud y longitud
   }
 
   const openMenu = () => {
     navigation.toggleDrawer()
   }
-  /* const { signIn, authState } = useContext(AuthContext) */
+
+  useEffect(() => {
+    saveTokenNotification().then(() => console.log('save token notification'))
+  }, [])
 
   return (
     <>

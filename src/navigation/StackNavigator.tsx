@@ -23,7 +23,7 @@ const StackNavigator = () => {
 
   return (
     <Stack.Navigator initialRouteName={ 'IndexScreen' } screenOptions={ { headerShown: false } } >
-      { !authState.isLoggdIn && !authState.token
+      { !authState.isLogIn && !authState.token
         ? (
           <>
             <Stack.Screen name="IndexScreen" component={ IndexScreen } />

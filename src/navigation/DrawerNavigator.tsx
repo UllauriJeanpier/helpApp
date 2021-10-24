@@ -1,5 +1,4 @@
 /* eslint-disable react-native/no-inline-styles */
-
 import React, { useContext } from 'react'
 import {
   View,
@@ -9,8 +8,7 @@ import {
 } from 'react-native'
 import {
   createDrawerNavigator,
-  DrawerContentComponentProps,
-  DrawerContentScrollView
+  DrawerContentComponentProps
 } from '@react-navigation/drawer'
 import HomeScreen from '../screens/Home/HomeScreen'
 import LanguageScreen from '../screens/Home/LanguageScreen'
