@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { updatePartialUser } from '../../services/yanapakun/user'
 import { IUserLogin } from '../../interfaces/authInterfaces'
 import { saveCallHelp } from '../../services/yanapakun/callHelp'
+import { updateProfile } from '../../services/yanapakun/profile'
 
 const HomeScreen = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false)
@@ -21,7 +22,7 @@ const HomeScreen = ({ navigation }: any) => {
   const saveTokenNotification = async () => {
     try {
       const user = await AsyncStorage.getItem('user')
-      const token = await AsyncStorage.getItem('token') ?? ''
+      const token = await AsyncStorage.getItem('tokenNotification') ?? ''
       let dataUser: IUserLogin
       if (typeof user === 'string') {
         dataUser = JSON.parse(user)
@@ -38,14 +39,26 @@ const HomeScreen = ({ navigation }: any) => {
 
   const getLocation = async () => {
     const { status, position } = await getCurrentLocation()
+    console.log(position)
     if (!status) {
       // Mostrar nuevamente el modal
       setModalVisible(true)
       return
     }
     position && setLocation(position)
-    console.log(location)
-    // Guardar latitud y longitud
+    try {
+      const user = await AsyncStorage.getItem('user')
+      let dataUser: IUserLogin
+      if (typeof user === 'string') {
+        dataUser = JSON.parse(user)
+        await updateProfile(dataUser?.id, {
+          latitude: String(position?.latitude),
+          longitude: String(position?.longitude)
+        })
+      }
+    } catch (e) {
+      console.log(e.message)
+    }
   }
 
   const openMenu = () => {
