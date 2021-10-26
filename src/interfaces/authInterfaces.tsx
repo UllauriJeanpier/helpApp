@@ -6,7 +6,7 @@ export interface IResLogin {
 export interface IDataLogin {
   user: IUserLogin
   access_token: string
-  isLoggdIn: boolean
+  isLogIn: boolean
 }
 
 export interface IUserLogin {

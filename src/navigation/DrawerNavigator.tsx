@@ -1,5 +1,4 @@
 /* eslint-disable react-native/no-inline-styles */
-
 import React, { useContext } from 'react'
 import {
   View,
@@ -9,8 +8,7 @@ import {
 } from 'react-native'
 import {
   createDrawerNavigator,
-  DrawerContentComponentProps,
-  DrawerContentScrollView
+  DrawerContentComponentProps
 } from '@react-navigation/drawer'
 import HomeScreen from '../screens/Home/HomeScreen'
 import LanguageScreen from '../screens/Home/LanguageScreen'
@@ -52,7 +50,7 @@ const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
 
     <View style={ styles.container }>
       <View style={ styles.iconContainer }>
-        <DrawerLogo width={ '60%' } height={ 100 } />
+        <DrawerLogo />
       </View>
       { /* Opciones  */ }
       <View style={ styles.optionsContainer }>
@@ -113,19 +111,20 @@ export default DrawerNavigator
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20
+    padding: 24
   },
   iconContainer: {
     width: '100%',
-    paddingBottom: 20
+    paddingVertical: 3
   },
   optionsContainer: {
+    paddingTop: 51,
     flex: 1,
     justifyContent: 'space-between'
   },
   btnOption: {
-    marginVertical: 10,
-    paddingVertical: 4
+    marginVertical: 9,
+    paddingVertical: 5
   },
   btnCommonOption: {
     borderBottomWidth: 1.5,

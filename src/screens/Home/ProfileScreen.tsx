@@ -7,6 +7,7 @@ import UserPhoto from '../../assets/svg/User-yanapakun.svg'
 import Camera from '../../assets/svg/Camara.svg'
 import { SCREEN } from '../../utils/constants'
 import { getProfile } from '../../services/yanapakun/profile'
+import Loading from '../../components/Loading'
 
 interface UserData {
   email: string
@@ -29,18 +30,8 @@ interface ProfileData {
   user: UserData
 }
 
-interface Props {
-  name: string
-  age: number | string
-  document: number
-  district: string
-  email: string
-  phone: number
-  phoneEmergency: number
-  img: any
-}
-
-const ProfileScreen = ({ name, age, document, district, email, img, phone, phoneEmergency }: Props) => {
+const ProfileScreen = ({ navigation }: any) => {
+  const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<ProfileData>({
     age: 0,
     dateBirth: '',
@@ -61,6 +52,7 @@ const ProfileScreen = ({ name, age, document, district, email, img, phone, phone
   })
   const fetchData = async () => {
     try {
+      setLoading(true)
       const response = await getProfile()
       setProfile(response.data)
     } catch (e) {
@@ -68,60 +60,65 @@ const ProfileScreen = ({ name, age, document, district, email, img, phone, phone
     }
   }
   useEffect(() => {
-    fetchData()
+    fetchData().then(() => {
+      setLoading(false)
+    })
   }, [])
   return (
-    <SafeAreaView style={ styles.container }>
-      <ScrollView>
-        <View>
-          <Header title="Perfil"/>
+    <Loading loading={ loading }>
+      <SafeAreaView style={ styles.container }>
+        <ScrollView>
           <View>
-            <View style={ styles.UserPhoto }>
-              { /* <Image
+            <Header title="Perfil" icon={ 'menu' } action={ () => navigation.toggleDrawer() }/>
+            <View>
+              <View style={ styles.UserPhoto }>
+                { /* <Image
                 source={ img }
               /> */ }
-              <UserPhoto />
-              <TouchableOpacity
-                style={ styles.saveUserPhoto }
-                onPress={ () => alert('click') }
+                <UserPhoto />
+                <TouchableOpacity
+                  style={ styles.saveUserPhoto }
+                  onPress={ () => alert('click') }
               >
-                <Camera />
-              </TouchableOpacity>
-            </View>
-            <View style={ styles.data }>
-              <View style={ styles.dataUser }>
-                <Text style={ styles.fontText }>Nombre:</Text>
-                <Text style={ styles.fontText }>{ profile.firstName } { profile.lastName }</Text>
+                  <Camera />
+                </TouchableOpacity>
               </View>
-              <View style={ styles.dataUser }>
-                <Text style={ styles.fontText }>Edad:</Text>
-                <Text style={ styles.fontText }>{ profile.age } años</Text>
-              </View>
-              <View style={ styles.dataUser }>
-                <Text style={ styles.fontText }>DNI:</Text>
-                <Text style={ styles.fontText }>{ profile.document }</Text>
-              </View>
-              <View style={ styles.dataUser }>
-                <Text style={ styles.fontText }>Distrito:</Text>
-                <Text style={ styles.fontText }>{ profile.district }</Text>
-              </View>
-              <View style={ styles.dataUser }>
-                <Text style={ styles.fontText }>E-mail:</Text>
-                <Text style={ styles.fontText }>{ profile.user.email }</Text>
-              </View>
-              <View style={ styles.dataUser }>
-                <Text style={ styles.fontText }>Número de teléfono:</Text>
-                <Text style={ styles.fontText }>{ profile.phone }</Text>
-              </View>
-              <View style={ styles.lastDataUser }>
-                <Text style={ styles.fontText }>Teléfono de emergencia:</Text>
-                <Text style={ styles.fontText }>{ profile.emergencyNumber }</Text>
+              <View style={ styles.data }>
+                <View style={ styles.dataUser }>
+                  <Text style={ styles.fontText }>Nombre:</Text>
+                  <Text style={ styles.fontText }>{ profile.firstName } { profile.lastName }</Text>
+                </View>
+                <View style={ styles.dataUser }>
+                  <Text style={ styles.fontText }>Edad:</Text>
+                  <Text style={ styles.fontText }>{ profile.age } años</Text>
+                </View>
+                <View style={ styles.dataUser }>
+                  <Text style={ styles.fontText }>DNI:</Text>
+                  <Text style={ styles.fontText }>{ profile.document }</Text>
+                </View>
+                <View style={ styles.dataUser }>
+                  <Text style={ styles.fontText }>Distrito:</Text>
+                  <Text style={ styles.fontText }>{ profile.district }</Text>
+                </View>
+                <View style={ styles.dataUser }>
+                  <Text style={ styles.fontText }>E-mail:</Text>
+                  <Text style={ styles.fontText }>{ profile.user.email }</Text>
+                </View>
+                <View style={ styles.dataUser }>
+                  <Text style={ styles.fontText }>Número de teléfono:</Text>
+                  <Text style={ styles.fontText }>{ profile.phone }</Text>
+                </View>
+                <View style={ styles.lastDataUser }>
+                  <Text style={ styles.fontText }>Teléfono de emergencia:</Text>
+                  <Text style={ styles.fontText }>{ profile.emergencyNumber }</Text>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </Loading>
+
   )
 }
 

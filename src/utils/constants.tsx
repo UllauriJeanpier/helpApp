@@ -3,6 +3,7 @@ import { Dimensions } from 'react-native'
 export enum COLORS {
   PRIMARY='#216D3F',
   SECONDARY= '#0C4724',
+  BG_GRAY= '#8F9290',
   TEXT_COLOR='#3A413D',
   TEXT_EMERGENCY= '#E30027'
 }

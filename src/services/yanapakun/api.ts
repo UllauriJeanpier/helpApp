@@ -8,7 +8,6 @@ api.interceptors.request.use(
   async (config) => {
     const urlsExcludedForBearerHeader = [
       '/auth/log-in',
-      '/auth/token',
       '/auth/register'
     ]
     if (!urlsExcludedForBearerHeader.includes(config.url ?? '')) {
@@ -19,13 +18,23 @@ api.interceptors.request.use(
   },
   async (error) => {
     const code = parseInt(error.response?.status)
-    console.log(code)
     if (code === 401) {
       console.log('Not authorized')
     }
     return await Promise.reject(error)
   }
 )
+
+api.interceptors.response.use((config) => {
+  return config
+}, async (error) => {
+  console.log(error.response?.data)
+  const code = parseInt(error.response?.status)
+  if (code === 401) {
+    console.log('Not authorized')
+  }
+  return await Promise.reject(error)
+})
 
 export const fetcher = async (resource: string) => {
   try {

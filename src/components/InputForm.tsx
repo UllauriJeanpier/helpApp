@@ -59,8 +59,8 @@ const InputForm = ({
         ? null
         : !validateInput
             ? (<Text style={ styles.errorMsg }>{ errorMessage }</Text>)
-            : null }
-
+            : null
+      }
     </View>
   )
 }
@@ -70,27 +70,26 @@ export default InputForm
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20
-    // backgroundColor: 'red'
   },
   txtlabel: {
     fontFamily: FONTS.ProximaNovaBold,
-    fontSize: 15
+    fontSize: 16,
+    color: COLORS.TEXT_COLOR
   },
   inputContainer: {
     width: '100%',
     justifyContent: 'center',
     flexDirection: 'row',
     marginTop: 5,
-    height: 50,
-    borderWidth: 1.2,
-    borderRadius: 15,
+    height: 48,
+    borderWidth: 1,
+    borderRadius: 10,
     borderColor: COLORS.PRIMARY
   },
   inputWidth: {
     width: '90%',
     fontSize: 15,
     fontFamily: FONTS.ProximaNovaRegular
-    // backgroundColor: 'red'
   },
   errorMsg: {
     margin: 5,

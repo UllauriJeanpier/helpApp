@@ -2,10 +2,10 @@ import React from 'react'
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Linking } from 'react-native'
 import Header from '../../components/Header'
 
-const NumberScreen = () => {
+const NumberScreen = ({ navigation }: any) => {
   return (
     <SafeAreaView style={ styles.container }>
-      <Header title="Número de ayuda"/>
+      <Header title="Número de ayuda" icon={ 'menu' } action={ () => navigation.toggleDrawer() }/>
       <View style={ styles.body }>
         <Text style={ styles.description }>
           A traves de estos números de teléfonos usted

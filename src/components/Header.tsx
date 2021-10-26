@@ -1,15 +1,21 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { COLORS, FONTS } from '../utils/constants'
+import { MaterialIcons } from '@expo/vector-icons'
 
 interface Props {
   title: string
   hasDrawer?: boolean
+  hasReturn?: boolean
+  icon?: 'keyboard-arrow-left' | 'menu'
+  action?: () => void
 }
-
-const Header = ({ title }: Props) => {
+const Header = ({ title, icon, action }: Props) => {
   return (
-    <View style={ styles.container }>
+    <View style={ styles.header }>
+      <TouchableOpacity style={ styles.opacity } onPress={ action } >
+        <MaterialIcons name={ icon } size={ 28 } style={ styles.icon } />
+      </TouchableOpacity>
       <Text style={ styles.title }>{ title }</Text>
     </View>
   )
@@ -18,7 +24,7 @@ const Header = ({ title }: Props) => {
 export default Header
 
 const styles = StyleSheet.create({
-  container: {
+  header: {
     flexDirection: 'row',
     width: '100%',
     height: 65,
@@ -30,5 +36,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontFamily: FONTS.ProximaNovaBold
+  },
+  opacity: {
+    position: 'absolute',
+    left: 25
+  },
+  icon: {
+    color: 'white'
   }
 })
