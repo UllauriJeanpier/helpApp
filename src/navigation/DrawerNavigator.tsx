@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import ProfileScreen from '../screens/Home/ProfileScreen'
 import DrawerLogo from '../assets/svg/Logo.svg'
 import { COLORS, FONTS } from '../utils/constants'
 import { AuthContext } from '../context/authContext'
+import ModalLanguage from '../components/ModalLanguage'
 
 export type RootDrawerParams = {
   HomeScreen: undefined
@@ -43,6 +44,7 @@ const DrawerNavigator = () => {
 
 const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
   const { logOut } = useContext(AuthContext)
+  const [ showModalLanguage, setShowModalLanguage ] = useState(false)
   const logout = () => {
     logOut()
   }
@@ -63,7 +65,7 @@ const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
             action={ () => navigation.navigate('ProfileScreen') } />
           <BtnOption
             title={ 'Cambiar idioma' }
-            action={ () => navigation.navigate('LanguageScreen') } />
+            action={() => setShowModalLanguage(true) } />
           <BtnOption
             title={ 'Números de ayuda' }
             action={ () => navigation.navigate('NumberScreen') } />
@@ -73,6 +75,10 @@ const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
           isLogoutOption
           action={ logout } />
       </View>
+      <ModalLanguage
+        isVisible={ showModalLanguage }
+        hideAction={ () => setShowModalLanguage(false) }
+      />
     </View>
   )
 }

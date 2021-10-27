@@ -4,7 +4,6 @@ import Alarma from '../../assets/svg/Alarma5.svg'
 import Info from '../../assets/svg/info.svg'
 import Header from '../../components/Header'
 import ModalInfo from '../../components/ModalInfo'
-import ModalLanguage from '../../components/ModalLanguage'
 import { IPosition } from '../../interfaces/locationInterface'
 import { COLORS, FONTS, SCREEN } from '../../utils/constants'
 import { getCurrentLocation } from '../../utils/helpers'
@@ -14,9 +13,8 @@ import { IUserLogin } from '../../interfaces/authInterfaces'
 import { saveCallHelp } from '../../services/yanapakun/callHelp'
 
 const HomeScreen = ({ navigation }: any) => {
-  const [modalVisible, setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(true)
   const [location, setLocation] = useState<IPosition>()
-  const [modalLanguage, setModalLanguage] = useState(false)
 
   const saveTokenNotification = async () => {
     try {
@@ -83,11 +81,6 @@ const HomeScreen = ({ navigation }: any) => {
       <ModalInfo
         isVisible={ modalVisible }
         hideAction={ () => setModalVisible(false) }
-      />
-      { /* Modal Language  */ }
-      <ModalLanguage
-        isVisible={ modalLanguage }
-        hideAction={ () => setModalLanguage(false) }
       />
     </>
   )
