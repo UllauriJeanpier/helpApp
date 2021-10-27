@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native';
 import Checkbox from 'expo-checkbox'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import Header from '../../components/Header'
@@ -14,7 +14,7 @@ import {
 
 import { RootStackParams } from '../../navigation/StackNavigator'
 import InputForm from '../../components/InputForm'
-import { COLORS } from '../../utils/constants'
+import { COLORS, FONTS } from '../../utils/constants'
 import Button from '../../components/Button'
 import { userSignUp } from '../../services/yanapakun/sigup'
 import Loading from '../../components/Loading'
@@ -59,6 +59,10 @@ const SignUpScreen = ({ navigation }: Props) => {
   const goToSignIn = () => navigation.navigate('SignInScreen')
 
   const registro = async () => {
+    if(names.length === 0 || surnames.length === 0 || age.length === 0 || DNI.length === 0 || district.length === 0 || email.length === 0 || password.length === 0 || confirmPassword !== password || confirmPassword.length === 0 || phone.length === 0 || emergencyNumber.length === 0 || isChecked === false) {
+      Alert.alert('Rellene los campos correctamente')
+      return;
+    }
     try {
       setLoading(true)
       await userSignUp({
@@ -197,11 +201,16 @@ const SignUpScreen = ({ navigation }: Props) => {
             valueInput={ confirmPassword }
             setValueInput={ setConfirmPassword }
             validateInput={ validateConfirmPassword }
-            setValidateInput={ setValidateConfirmPassword }
+            setValidateInput={  setValidateConfirmPassword}
             functionValidation={ handlePassword }
-            errorMessage={ 'Escribe una contraseña válida' }
+            // errorMessage={'Escribe una contraseña válida' }
             isPassword
         />
+        {
+          password !== confirmPassword ? (
+            <Text style={ styles.errorMsg }>Las contraseñas no coinciden</Text>
+          ): null
+        }
           <View style={ styles.checkSection }>
             <Checkbox
               style={ styles.checkbox }
@@ -251,5 +260,11 @@ const styles = StyleSheet.create({
   },
   boldTxtInfo: {
     fontWeight: 'bold'
+  },
+  errorMsg: {
+    margin: 5,
+    fontSize: 15,
+    fontFamily: FONTS.ProximaNovaRegular,
+    color: 'red'
   }
 })

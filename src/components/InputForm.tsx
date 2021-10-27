@@ -7,7 +7,7 @@ interface Props {
   placeholder: string
   disabledInput?: boolean
   limitCaracteres?: number
-  errorMessage: string
+  errorMessage?: string
   valueInput: string
   validateInput: boolean
   isPassword?: boolean | undefined

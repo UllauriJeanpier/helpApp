@@ -1,7 +1,7 @@
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native'
 import Button from '../../components/Button'
 import Header from '../../components/Header'
 import InputForm from '../../components/InputForm'
@@ -26,11 +26,15 @@ const SignInScreen = ({ navigation }: Props) => {
   const goToIndex = () => navigation.navigate('IndexScreen')
 
   const login = async () => {
+    if(email.length === 0 || password.length === 0){
+      Alert.alert('El campo de correo o contraseña no puede estar vacío')
+      return
+    }
     try {
       setLoading(true)
       await signIn({ email, password })
     } catch (e) {
-      console.log(e)
+      console.log(e, "Esto es del login")
       setLoading(false)
     }
   }
