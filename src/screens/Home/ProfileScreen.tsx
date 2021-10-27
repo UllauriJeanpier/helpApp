@@ -108,7 +108,6 @@ const ProfileScreen = ({ navigation }: any) => {
         allowsEditing: true,
         aspect: [2, 2]
       })
-      console.log(pickerResult)
       await handleImagePicked(pickerResult)
     } catch (e) {
       console.log(e)
@@ -118,9 +117,14 @@ const ProfileScreen = ({ navigation }: any) => {
   const handleImagePicked = async (pickerResult: ImagePicker.ImagePickerResult) => {
     try {
       if (!pickerResult.cancelled) {
-        await uploadImage(pickerResult.uri, 1)
-        await fetchData()
-        setLoading(false)
+        const user = await AsyncStorage.getItem('user')
+        let dataUser: IUserLogin
+        if (typeof user === 'string') {
+          dataUser = JSON.parse(user)
+          await uploadImage(pickerResult.uri, dataUser.id)
+          await fetchData()
+          setLoading(false)
+        }
       }
     } catch (e) {
       console.log({ e })

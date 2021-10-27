@@ -33,7 +33,6 @@ export const uploadImage = async (uri: string, id: number) => {
   const token = await AsyncStorage.getItem('token') ?? ''
   const uriArray = uri.split('.')
   const fileType = uriArray[uriArray.length - 1]
-
   const formData = new FormData()
   formData.append('photo', {
   // @ts-expect-error

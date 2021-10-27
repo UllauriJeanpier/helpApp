@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }: any) => {
             dispatch({ type: 'signIn', payload: data })
           }
         }).catch((err) => {
+          logOut()
           console.log(err.message)
         })
       }
