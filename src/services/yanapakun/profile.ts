@@ -7,43 +7,52 @@ export const getProfile = async () => {
 
 export const getProfilePhoto = async (id: number) => {
   const token = await AsyncStorage.getItem('token') ?? ''
-  const file = await fetch(`https://yanapakunpolicia.com/users/profile/photo/${id}`, {
+  return await fetch(`https://yanapakunpolicia.com/users/profile/photo/${id}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`
     }
+  }).then(async e => {
+    const convertBlobToBase64 = async (blob: Blob) =>
+      await new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onerror = reject
+        reader.onload = () => {
+          resolve(reader.result)
+        }
+        reader.readAsDataURL(blob)
+      })
+    if (e.status === 200) {
+      const resFile = await e.blob()
+      return await convertBlobToBase64(resFile)
+    }
   })
-  const dataBlob = await file.blob()
-
-  const convertBlobToBase64 = async (blob: Blob) =>
-    await new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onerror = reject
-      reader.onload = () => {
-        resolve(reader.result)
-      }
-      reader.readAsDataURL(blob)
-    })
-
-  return await convertBlobToBase64(dataBlob)
 }
 
-// export const uploadImage = a sync (photo: string, id: number,)=> {
+export const uploadImage = async (uri: string, id: number) => {
+  const token = await AsyncStorage.getItem('token') ?? ''
+  const uriArray = uri.split('.')
+  const fileType = uriArray[uriArray.length - 1]
 
-//   // const formData = new FormData()
-//   // formData.append('photo',photo)
+  const formData = new FormData()
+  formData.append('photo', {
+  // @ts-expect-error
+    uri,
+    name: `photo.${fileType}`,
+    type: `image/${fileType}`
+  })
 
-//   // const body = {
-//   //   photo,
-//   //   "Content-Type": "multipart/form-data"
-//   // }
+  const options = {
+    method: 'POST',
+    body: formData,
+    mode: 'cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'multipart/form-data',
+      Authorization: `Bearer ${token}`
+    }
+  }
 
-//   // try {
-//   //   const resp = await Api.post(`/users/profile/photo/${id}`, body)
-//   //   console.log({resp});
-
-//   // } catch (error) {
-//   //   console.log({error});
-
-//   // }
-// }
+  // @ts-expect-error
+  return await fetch(`https://yanapakunpolicia.com/users/profile/photo/${id}`, options)
+}

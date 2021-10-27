@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, ScrollView, Text, View, SafeAreaView, TouchableOpacity, Image, Platform } from 'react-native'
+import { Image, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import Header from '../../components/Header'
 import UserPhoto from '../../assets/svg/User-yanapakun.svg'
 import Camera from '../../assets/svg/Camara.svg'
-import { getProfile, getProfilePhoto } from '../../services/yanapakun/profile'
+import { getProfile, getProfilePhoto, uploadImage } from '../../services/yanapakun/profile'
 import Loading from '../../components/Loading'
 
 import * as ImagePicker from 'expo-image-picker'
@@ -57,6 +57,7 @@ const ProfileScreen = ({ navigation }: any) => {
       setLoading(true)
       const response = await getProfile()
       setProfile(response.data)
+      await fetchPhotoUser()
     } catch (e) {
       console.log(e)
     }
@@ -71,21 +72,16 @@ const ProfileScreen = ({ navigation }: any) => {
       if (typeof user === 'string') {
         dataUser = JSON.parse(user)
         const response = await getProfilePhoto(dataUser?.id)
-        setImage(String(response))
+        if (response) {
+          setImage(String(response))
+        } else {
+          setImage('')
+        }
       }
     } catch (e) {
       console.log(e)
     }
   }
-  useEffect(() => {
-    fetchData().then(() => {
-      setLoading(false)
-    })
-  }, [])
-  useEffect(() => {
-    fetchPhotoUser()
-    pickImg()
-  }, [])
   const pickImg = async () => {
     if (Platform.OS === 'ios') {
       const cameraRollStatus = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -99,21 +95,39 @@ const ProfileScreen = ({ navigation }: any) => {
     }
   }
 
-  const pickerPicture = async () => {
-    const resp = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 2],
-      quality: 0.8
+  useEffect(() => {
+    fetchData().then(() => {
+      setLoading(false)
     })
-    if (resp.cancelled) return
-    if (!resp.uri) return
-    console.log(resp)
-    setImage(resp.uri)
-    const formData = new FormData()
-    formData.append('photo', resp.uri)
-    // uploadImage(resp.uri, profile.id)
+    pickImg()
+  }, [])
+
+  const pickerPicture = async () => {
+    try {
+      const pickerResult = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [2, 2]
+      })
+      console.log(pickerResult)
+      await handleImagePicked(pickerResult)
+    } catch (e) {
+      console.log(e)
+    }
   }
+
+  const handleImagePicked = async (pickerResult: ImagePicker.ImagePickerResult) => {
+    try {
+      if (!pickerResult.cancelled) {
+        await uploadImage(pickerResult.uri, 1)
+        await fetchData()
+        setLoading(false)
+      }
+    } catch (e) {
+      console.log({ e })
+      alert('Upload failed, sorry :(')
+    }
+  }
+
   return (
     <Loading loading={ loading }>
       <SafeAreaView style={ styles.container }>
