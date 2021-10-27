@@ -34,7 +34,7 @@ const SignInScreen = ({ navigation }: Props) => {
       setLoading(true)
       await signIn({ email, password })
     } catch (e) {
-      console.log(e, "Esto es del login")
+      console.log(e)
       setLoading(false)
     }
   }
