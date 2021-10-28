@@ -137,6 +137,7 @@ const SignUpScreen = ({ navigation }: Props) => {
             setValueInput={ setDNI }
             validateInput={ validateDNI }
             setValidateInput={ setValidateDNI }
+            keyboardType="numeric"
             functionValidation={ handleDNI }
             errorMessage={ 'Escribe un DNI válido' }
         />
@@ -169,6 +170,7 @@ const SignUpScreen = ({ navigation }: Props) => {
             validateInput={ validatePhone }
             setValidateInput={ setValidatePhone }
             functionValidation={ handleName }
+            keyboardType="numeric"
             errorMessage={ 'Escribe un teléfono válido' }
             placeholder={ '' }
         />
@@ -180,6 +182,7 @@ const SignUpScreen = ({ navigation }: Props) => {
             validateInput={ validateEmergencyNumber }
             setValidateInput={ setValidateEmergencyNumber }
             functionValidation={ handleName }
+            keyboardType="numeric"
             errorMessage={ 'Escribe un teléfono válido' }
             placeholder={ '' }
         />
