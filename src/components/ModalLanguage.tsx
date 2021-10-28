@@ -24,7 +24,7 @@ const ModalLanguage = ({ isVisible, hideAction }: Props) => {
             <Close width={ 24 } height={ 24 } />
           </TouchableOpacity>
           <View style={ styles.mssgIconContainer }>
-            <Idioma width={ '100%' } height={ '100%' } />
+            <Idioma width={ 100 } height={ 100 } />
           </View>
           <View>
               <TouchableOpacity 
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
   },
   containerModal: {
     padding: 15,
-    height: '43%',
     width: '85%',
     justifyContent: 'space-evenly',
     backgroundColor: '#FFFCF7',
@@ -81,9 +80,8 @@ const styles = StyleSheet.create({
     marginTop: 30
   },
   mssgIconContainer: {
-    flex: 3,
     marginTop: 20,
-    marginBottom: 45,
+    marginBottom: 40,
     justifyContent: 'center',
     alignItems: 'center'
   },

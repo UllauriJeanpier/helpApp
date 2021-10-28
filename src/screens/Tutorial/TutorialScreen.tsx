@@ -2,14 +2,13 @@ import React, { useState } from 'react'
 
 import {
   View,
-  Text, StyleSheet
+  Text, StyleSheet, TouchableOpacity
 } from 'react-native'
 import Carousel, { Pagination } from 'react-native-snap-carousel'
 import Notification from '../../assets/svg/notification.svg'
 import PoliceIcon from '../../assets/svg/Group 3.svg'
 import TabAlarma from '../../assets/svg/TabAlarma.svg'
 import { SCREEN } from '../../utils/constants'
-import Button from '../../components/Button'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParams } from '../../navigation/StackNavigator'
 
@@ -52,7 +51,15 @@ const TutorialScreen = ({ navigation }: Props) => {
   const renderButton = () => {
     const goDrawer = () => navigation.navigate('DrawerNavigator')
 
-    if (activeIndex === 2) { return <Button title={ 'Iniciar' } action={ goDrawer } /> }
+    if (activeIndex === 2) { return (
+      <TouchableOpacity
+        onPress={ goDrawer }
+        style={ styles.btnNext }
+      >
+        <Text style={ styles.textNext }>Siguiente </Text>
+        <View style={ styles.iconNext }/>
+      </TouchableOpacity>) 
+    }
     return null
   }
 
@@ -105,6 +112,26 @@ const styles = StyleSheet.create({
     height: 15,
     borderRadius: 15,
     backgroundColor: '#3A413D'
+  },
+  btnNext: {
+    position: 'absolute',
+    right:20,
+    top: 50,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  textNext: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#3A413D'
+  },
+  iconNext: {
+    width: 8,
+    height: 8,
+    borderBottomWidth: 2,
+    borderEndWidth: 2,
+    transform: [{ rotateZ: "-45deg" }]
   }
 })
 
