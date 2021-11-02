@@ -11,9 +11,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { updatePartialUser } from '../../services/yanapakun/user'
 import { IUserLogin } from '../../interfaces/authInterfaces'
 import { saveCallHelp } from '../../services/yanapakun/callHelp'
+import PoliceIcon from '../../assets/svg/Group 3.svg'
 
 const HomeScreen = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(true)
+  const [helpOnTheWay, setHelpOnTheWay] = useState(false)
   const [location, setLocation] = useState<IPosition>()
 
   const saveTokenNotification = async () => {
@@ -43,6 +45,7 @@ const HomeScreen = ({ navigation }: any) => {
     }
     position && setLocation(position)
     console.log(location)
+    setHelpOnTheWay(true)
     // Guardar latitud y longitud
   }
 
@@ -57,31 +60,46 @@ const HomeScreen = ({ navigation }: any) => {
   return (
     <>
       <Header title='Yanapakun Policía' icon={ 'menu' } action={ openMenu } />
-      <View style={ styles.container }>
-        <Text style={ styles.txtInfo }>
-          Si necesitas ayuda de forma urgente,
-          presiona el botón para que una
-          autoridad se dirija a tu ubicación
-        </Text>
-        <TouchableOpacity style={ styles.imageContainer } onPress={ getLocation } >
-          <Alarma width={ '100%' } height={ SCREEN.height * 0.3 } />
-        </TouchableOpacity>
-        <Text style={ styles.txtEmergency }>
-          SOLO EN CASO DE EMERGENCIA
-        </Text>
-        <View style={ styles.alertContainer }>
-          <Info width={ 20 } height={ 20 }/>
-          <Text style={ styles.txtAlert }>
-            Recuerda que para la efectividad
-            del aplicativo es importante tener
-            tu ubicación activada
+      { !helpOnTheWay
+        ?
+        (
+        <View style={ styles.container }>
+          <Text style={ styles.txtInfo }>
+            Si necesitas ayuda de forma urgente,
+            presiona el botón para que una
+            autoridad se dirija a tu ubicación
           </Text>
+          <TouchableOpacity style={ styles.imageContainer } onPress={ getLocation } >
+            <Alarma width={ '100%' } height={ SCREEN.height * 0.3 } />
+          </TouchableOpacity>
+          <Text style={ styles.txtEmergency }>
+            SOLO EN CASO DE EMERGENCIA
+          </Text>
+          <View style={ styles.alertContainer }>
+            <Info width={ 20 } height={ 20 }/>
+            <Text style={ styles.txtAlert }>
+              Recuerda que para la efectividad
+              del aplicativo es importante tener
+              tu ubicación activada
+            </Text>
+          </View>
+          <ModalInfo
+            isVisible={ modalVisible }
+            hideAction={ () => setModalVisible(false) }
+          />
+          {/* <View style={ styles.container }>
+              ******** Aqui va el efecto del boton, investigando ********
+              <Alarma width={ '100%' } height={ SCREEN.height * 0.3 }/>
+              </View> */}
         </View>
-      </View>
-      <ModalInfo
-        isVisible={ modalVisible }
-        hideAction={ () => setModalVisible(false) }
-      />
+        )
+        : 
+        (<View style={ styles.containerWait }>
+          <Text style={ styles.txtSecure }> Espera en un lugar seguro </Text>
+          <PoliceIcon style={ styles.imgPolice } width={ SCREEN.width * 0.6 } height={ SCREEN.width * 0.6 } />
+          <Text style={ styles.txtHelp }>LA AYUDA VA EN CAMINO</Text>
+        </View>)
+      }
     </>
   )
 }
@@ -130,5 +148,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.ProximaNovaRegular
     // textAlign: 'center'
+  },
+  containerWait: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center' 
+  },
+  imgPolice: {
+    marginVertical: 57
+  },
+  txtSecure: {
+    fontSize: 20,
+    color: '#000',
+    fontFamily: FONTS.ProximaNovaBold
+  },
+  txtHelp: {
+    color: '#E30027',
+    fontSize: 22,
+    fontFamily: FONTS.ProximaNovaExtrabold
   }
 })
