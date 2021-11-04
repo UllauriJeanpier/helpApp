@@ -10,9 +10,11 @@ import { FONTS, SCREEN } from '../../utils/constants';
 
 export const AnimatedScreen = ({ navigation } : any) => {
     const [showAnimated, setShowAnimated] = useState(true)
+
     const openMenu = () => {
         navigation.toggleDrawer()
       }
+
     const scale = useSharedValue(1.8)
     const animatedStyle = useAnimatedStyle(()=>{
         return {
@@ -20,6 +22,8 @@ export const AnimatedScreen = ({ navigation } : any) => {
           transform: [{scale: scale.value}]
         }
     })
+
+    
     useEffect(() => {
         scale.value = withRepeat(withSpring(1.2), -1, true)
         setTimeout(() => {
@@ -29,7 +33,7 @@ export const AnimatedScreen = ({ navigation } : any) => {
 
     return (
         <>
-        <Header title='Yanapakun Policía' />
+        <Header title='Yanapakun Policía' icon={ 'menu' } action={ openMenu }/>
         <View style={ styles.containerWait }>
           { showAnimated! ?
             <View style= { styles.boxAnimated }>
