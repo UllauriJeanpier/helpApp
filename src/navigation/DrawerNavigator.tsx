@@ -18,12 +18,14 @@ import DrawerLogo from '../assets/svg/Logo.svg'
 import { COLORS, FONTS } from '../utils/constants'
 import { AuthContext } from '../context/authContext'
 import ModalLanguage from '../components/ModalLanguage'
+import { AnimatedScreen } from '../screens/Home/AnimatedScreen'
 
 export type RootDrawerParams = {
   HomeScreen: undefined
   ProfileScreen: undefined
   LanguageScreen: undefined
-  NumberScreen: undefined
+  NumberScreen: undefined,
+  AnimatedScreen: undefined
 }
 
 const Drawer = createDrawerNavigator<RootDrawerParams>()
@@ -38,6 +40,7 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="ProfileScreen" component={ ProfileScreen } />
       <Drawer.Screen name="LanguageScreen" component={ LanguageScreen } />
       <Drawer.Screen name="NumberScreen" component={ NumberScreen } />
+      <Drawer.Screen name="AnimatedScreen" component={ AnimatedScreen } />
     </Drawer.Navigator>
   )
 }
