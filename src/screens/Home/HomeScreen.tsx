@@ -15,9 +15,8 @@ import { saveCallHelp } from '../../services/yanapakun/callHelp'
 import { updateProfile } from '../../services/yanapakun/profile'
 
 const HomeScreen = ({ navigation }: any) => {
-  const [modalVisible, setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(true)
   const [location, setLocation] = useState<IPosition>()
-  const [modalLanguage, setModalLanguage] = useState(false)
 
   const saveTokenNotification = async () => {
     try {
@@ -39,13 +38,15 @@ const HomeScreen = ({ navigation }: any) => {
 
   const getLocation = async () => {
     const { status, position } = await getCurrentLocation()
-    console.log(position)
     if (!status) {
       // Mostrar nuevamente el modal
       setModalVisible(true)
       return
     }
     position && setLocation(position)
+    console.log(location)
+    navigation.navigate('AnimatedScreen')
+    // Guardar latitud y longitud
     try {
       const user = await AsyncStorage.getItem('user')
       let dataUser: IUserLogin
@@ -72,36 +73,31 @@ const HomeScreen = ({ navigation }: any) => {
   return (
     <>
       <Header title='Yanapakun Policía' icon={ 'menu' } action={ openMenu } />
-      <View style={ styles.container }>
-        <Text style={ styles.txtInfo }>
-          Si necesitas ayuda de forma urgente,
-          presiona el botón para que una
-          autoridad se dirija a tu ubicación
-        </Text>
-        <TouchableOpacity style={ styles.imageContainer } onPress={ getLocation } >
-          <Alarma width={ '100%' } height={ SCREEN.height * 0.3 } />
-        </TouchableOpacity>
-        <Text style={ styles.txtEmergency }>
-          SOLO EN CASO DE EMERGENCIA
-        </Text>
-        <View style={ styles.alertContainer }>
-          <Info width={ 20 } height={ 20 }/>
-          <Text style={ styles.txtAlert }>
-            Recuerda que para la efectividad
-            del aplicativo es importante tener
-            tu ubicación activada
+        <View style={ styles.container }>
+          <Text style={ styles.txtInfo }>
+            Si necesitas ayuda de forma urgente,
+            presiona el botón para que una
+            autoridad se dirija a tu ubicación
           </Text>
+          <TouchableOpacity style={ styles.imageContainer } onPress={ getLocation } >
+            <Alarma width={ '100%' } height={ SCREEN.height * 0.3 } />
+          </TouchableOpacity>
+          <Text style={ styles.txtEmergency }>
+            SOLO EN CASO DE EMERGENCIA
+          </Text>
+          <View style={ styles.alertContainer }>
+            <Info width={ 20 } height={ 20 }/>
+            <Text style={ styles.txtAlert }>
+              Recuerda que para la efectividad
+              del aplicativo es importante tener
+              tu ubicación activada
+            </Text>
+          </View>
+          <ModalInfo
+            isVisible={ modalVisible }
+            hideAction={ () => setModalVisible(false) }
+          />
         </View>
-      </View>
-      <ModalInfo
-        isVisible={ modalVisible }
-        hideAction={ () => setModalVisible(false) }
-      />
-      { /* Modal Language  */ }
-      <ModalLanguage
-        isVisible={ modalLanguage }
-        hideAction={ () => setModalLanguage(false) }
-      />
     </>
   )
 }

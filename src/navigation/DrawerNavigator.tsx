@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   View,
   Text,
@@ -17,12 +17,15 @@ import ProfileScreen from '../screens/Home/ProfileScreen'
 import DrawerLogo from '../assets/svg/Logo.svg'
 import { COLORS, FONTS } from '../utils/constants'
 import { AuthContext } from '../context/authContext'
+import ModalLanguage from '../components/ModalLanguage'
+import { AnimatedScreen } from '../screens/Home/AnimatedScreen'
 
 export type RootDrawerParams = {
   HomeScreen: undefined
   ProfileScreen: undefined
   LanguageScreen: undefined
-  NumberScreen: undefined
+  NumberScreen: undefined,
+  AnimatedScreen: undefined
 }
 
 const Drawer = createDrawerNavigator<RootDrawerParams>()
@@ -37,12 +40,14 @@ const DrawerNavigator = () => {
       <Drawer.Screen name="ProfileScreen" component={ ProfileScreen } />
       <Drawer.Screen name="LanguageScreen" component={ LanguageScreen } />
       <Drawer.Screen name="NumberScreen" component={ NumberScreen } />
+      <Drawer.Screen name="AnimatedScreen" component={ AnimatedScreen } />
     </Drawer.Navigator>
   )
 }
 
 const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
   const { logOut } = useContext(AuthContext)
+  const [ showModalLanguage, setShowModalLanguage ] = useState(false)
   const logout = () => {
     logOut()
   }
@@ -63,7 +68,7 @@ const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
             action={ () => navigation.navigate('ProfileScreen') } />
           <BtnOption
             title={ 'Cambiar idioma' }
-            action={ () => navigation.navigate('LanguageScreen') } />
+            action={() => setShowModalLanguage(true) } />
           <BtnOption
             title={ 'Números de ayuda' }
             action={ () => navigation.navigate('NumberScreen') } />
@@ -73,6 +78,10 @@ const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
           isLogoutOption
           action={ logout } />
       </View>
+      <ModalLanguage
+        isVisible={ showModalLanguage }
+        hideAction={ () => setShowModalLanguage(false) }
+      />
     </View>
   )
 }
