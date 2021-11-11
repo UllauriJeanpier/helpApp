@@ -14,7 +14,6 @@ const useNotifications = () => {
   useEffect(() => {
     getPushToken().then(async (pushToken) => {
       if (pushToken) {
-        console.log(pushToken)
         setExpoPushToken(pushToken)
         await AsyncStorage.setItem('tokenNotification', pushToken)
       }

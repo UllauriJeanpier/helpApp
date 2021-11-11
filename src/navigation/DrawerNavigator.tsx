@@ -24,7 +24,7 @@ export type RootDrawerParams = {
   HomeScreen: undefined
   ProfileScreen: undefined
   LanguageScreen: undefined
-  NumberScreen: undefined,
+  NumberScreen: undefined
   AnimatedScreen: undefined
 }
 
@@ -47,7 +47,7 @@ const DrawerNavigator = () => {
 
 const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
   const { logOut } = useContext(AuthContext)
-  const [ showModalLanguage, setShowModalLanguage ] = useState(false)
+  const [showModalLanguage, setShowModalLanguage] = useState(false)
   const logout = () => {
     logOut()
   }
@@ -68,7 +68,7 @@ const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
             action={ () => navigation.navigate('ProfileScreen') } />
           <BtnOption
             title={ 'Cambiar idioma' }
-            action={() => setShowModalLanguage(true) } />
+            action={ () => setShowModalLanguage(true) } />
           <BtnOption
             title={ 'Números de ayuda' }
             action={ () => navigation.navigate('NumberScreen') } />

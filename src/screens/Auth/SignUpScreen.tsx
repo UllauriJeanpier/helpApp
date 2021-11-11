@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import Header from '../../components/Header'
@@ -59,9 +59,9 @@ const SignUpScreen = ({ navigation }: Props) => {
   const goToSignIn = () => navigation.navigate('SignInScreen')
 
   const registro = async () => {
-    if(names.length === 0 || surnames.length === 0 || age.length === 0 || DNI.length === 0 || district.length === 0 || email.length === 0 || password.length === 0 || confirmPassword !== password || confirmPassword.length === 0 || phone.length === 0 || emergencyNumber.length === 0 || isChecked === false) {
+    if (names.length === 0 || surnames.length === 0 || age.length === 0 || DNI.length === 0 || district.length === 0 || email.length === 0 || password.length === 0 || confirmPassword !== password || confirmPassword.length === 0 || phone.length === 0 || emergencyNumber.length === 0 || !isChecked) {
       Alert.alert('Rellene los campos correctamente')
-      return;
+      return
     }
     try {
       setLoading(true)
@@ -204,15 +204,17 @@ const SignUpScreen = ({ navigation }: Props) => {
             valueInput={ confirmPassword }
             setValueInput={ setConfirmPassword }
             validateInput={ validateConfirmPassword }
-            setValidateInput={  setValidateConfirmPassword}
+            setValidateInput={ setValidateConfirmPassword }
             functionValidation={ handlePassword }
             // errorMessage={'Escribe una contraseña válida' }
             isPassword
         />
-        {
-          password !== confirmPassword ? (
-            <Text style={ styles.errorMsg }>Las contraseñas no coinciden</Text>
-          ): null
+          {
+          password !== confirmPassword
+            ? (
+              <Text style={ styles.errorMsg }>Las contraseñas no coinciden</Text>
+              )
+            : null
         }
           <View style={ styles.checkSection }>
             <Checkbox

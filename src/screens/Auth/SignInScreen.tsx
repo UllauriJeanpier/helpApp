@@ -1,4 +1,3 @@
-
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native'
@@ -11,7 +10,8 @@ import { COLORS } from '../../utils/constants'
 import { handleEmail, handlePassword } from '../../utils/validateFuntions'
 import Loading from '../../components/Loading'
 
-interface Props extends NativeStackScreenProps<RootStackParams, 'SignInScreen'>{}
+interface Props extends NativeStackScreenProps<RootStackParams, 'SignInScreen'> {
+}
 
 const SignInScreen = ({ navigation }: Props) => {
   const [loading, setLoading] = useState(true)
@@ -26,13 +26,16 @@ const SignInScreen = ({ navigation }: Props) => {
   const goToIndex = () => navigation.navigate('IndexScreen')
 
   const login = async () => {
-    if(email.length === 0 || password.length === 0){
+    if (email.length === 0 || password.length === 0) {
       Alert.alert('El campo de correo o contraseña no puede estar vacío')
       return
     }
     try {
       setLoading(true)
-      await signIn({ email, password })
+      await signIn({
+        email,
+        password
+      })
     } catch (e) {
       console.log(e)
       setLoading(false)
@@ -43,9 +46,9 @@ const SignInScreen = ({ navigation }: Props) => {
     setLoading(false)
   }, [])
   return (
-    <Loading loading={ loading } >
+    <Loading loading={ loading }>
       <ScrollView>
-        <Header title="Iniciar sesión" icon='keyboard-arrow-left' action={ goToIndex } />
+        <Header title="Iniciar sesión" icon="keyboard-arrow-left" action={ goToIndex }/>
         <View style={ styles.container }>
           <View style={ styles.inputsContainer }>
             <InputForm
@@ -57,7 +60,7 @@ const SignInScreen = ({ navigation }: Props) => {
               setValidateInput={ setValidateEmail }
               functionValidation={ handleEmail }
               errorMessage={ 'Escribe un correo válido' }
-          />
+            />
             <InputForm
               label={ 'Contraseña:' }
               placeholder={ 'Escriba su contraseña' }
@@ -68,13 +71,13 @@ const SignInScreen = ({ navigation }: Props) => {
               functionValidation={ handlePassword }
               errorMessage={ 'Escribe una contraseña válida' }
               isPassword
-          />
+            />
           </View>
           <View style={ styles.sessionContainer }>
             <Text style={ styles.txtInf }>Olvidaste tu contraseña</Text>
-            <Button title={ 'Iniciar sesión' } action={ login } />
+            <Button title={ 'Iniciar sesión' } action={ login }/>
             <Text style={ [styles.txtInf, styles.decorationNone] }>¿Aún no estás registrado?{ ' ' }
-              <Text style={ styles.boldTxtInfo } onPress={ goToSignUp } >
+              <Text style={ styles.boldTxtInfo } onPress={ goToSignUp }>
                 Regístrate aquí
               </Text>
             </Text>

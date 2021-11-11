@@ -37,7 +37,10 @@ const HomeScreen = ({ navigation }: any) => {
   }
 
   const getLocation = async () => {
-    const { status, position } = await getCurrentLocation()
+    const {
+      status,
+      position
+    } = await getCurrentLocation()
     if (!status) {
       // Mostrar nuevamente el modal
       setModalVisible(true)
@@ -72,32 +75,32 @@ const HomeScreen = ({ navigation }: any) => {
 
   return (
     <>
-      <Header title='Yanapakun Policía' icon={ 'menu' } action={ openMenu } />
-        <View style={ styles.container }>
-          <Text style={ styles.txtInfo }>
-            Si necesitas ayuda de forma urgente,
-            presiona el botón para que una
-            autoridad se dirija a tu ubicación
+      <Header title="Yanapakun Policía" icon={ 'menu' } action={ openMenu }/>
+      <View style={ styles.container }>
+        <Text style={ styles.txtInfo }>
+          Si necesitas ayuda de forma urgente,
+          presiona el botón para que una
+          autoridad se dirija a tu ubicación
+        </Text>
+        <TouchableOpacity style={ styles.imageContainer } onPress={ getLocation }>
+          <Alarma width={ '100%' } height={ SCREEN.height * 0.3 }/>
+        </TouchableOpacity>
+        <Text style={ styles.txtEmergency }>
+          SOLO EN CASO DE EMERGENCIA
+        </Text>
+        <View style={ styles.alertContainer }>
+          <Info width={ 20 } height={ 20 }/>
+          <Text style={ styles.txtAlert }>
+            Recuerda que para la efectividad
+            del aplicativo es importante tener
+            tu ubicación activada
           </Text>
-          <TouchableOpacity style={ styles.imageContainer } onPress={ getLocation } >
-            <Alarma width={ '100%' } height={ SCREEN.height * 0.3 } />
-          </TouchableOpacity>
-          <Text style={ styles.txtEmergency }>
-            SOLO EN CASO DE EMERGENCIA
-          </Text>
-          <View style={ styles.alertContainer }>
-            <Info width={ 20 } height={ 20 }/>
-            <Text style={ styles.txtAlert }>
-              Recuerda que para la efectividad
-              del aplicativo es importante tener
-              tu ubicación activada
-            </Text>
-          </View>
-          <ModalInfo
-            isVisible={ modalVisible }
-            hideAction={ () => setModalVisible(false) }
-          />
         </View>
+        <ModalInfo
+          isVisible={ modalVisible }
+          hideAction={ () => setModalVisible(false) }
+        />
+      </View>
     </>
   )
 }
@@ -124,7 +127,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     alignItems: 'center'
-  //  backgroundColor: 'red'
+    //  backgroundColor: 'red'
   },
   txtEmergency: {
     textAlign: 'center',
