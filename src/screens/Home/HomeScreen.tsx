@@ -4,14 +4,12 @@ import Alarma from '../../assets/svg/Alarma5.svg'
 import Info from '../../assets/svg/info.svg'
 import Header from '../../components/Header'
 import ModalInfo from '../../components/ModalInfo'
-import ModalLanguage from '../../components/ModalLanguage'
 import { IPosition } from '../../interfaces/locationInterface'
 import { COLORS, FONTS, SCREEN } from '../../utils/constants'
 import { getCurrentLocation } from '../../utils/helpers'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { updatePartialUser } from '../../services/yanapakun/user'
 import { IUserLogin } from '../../interfaces/authInterfaces'
-import { saveCallHelp } from '../../services/yanapakun/callHelp'
 import { updateProfile } from '../../services/yanapakun/profile'
 
 const HomeScreen = ({ navigation }: any) => {
@@ -48,7 +46,6 @@ const HomeScreen = ({ navigation }: any) => {
     }
     position && setLocation(position)
     console.log(location)
-    navigation.navigate('AnimatedScreen')
     // Guardar latitud y longitud
     try {
       const user = await AsyncStorage.getItem('user')
@@ -59,6 +56,7 @@ const HomeScreen = ({ navigation }: any) => {
           latitude: String(position?.latitude),
           longitude: String(position?.longitude)
         })
+        navigation.navigate('AnimatedScreen')
       }
     } catch (e) {
       console.log(e.message)
