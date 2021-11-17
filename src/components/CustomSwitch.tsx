@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { COLORS, FONTS } from '../utils/constants'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
   option1: string
@@ -13,21 +14,27 @@ const CustomSwitch = ({
   option2,
   onSelectSwitch
 }: Props) => {
-  const [getSelectionMode, setSelectionMode] = useState(1)
-
-  const updatedSwitchData = (val: any) => {
+  const [getSelectionMode, setSelectionMode] = useState('castellano')
+  const updatedSwitchData = async (val: any) => {
     setSelectionMode(val)
     onSelectSwitch(val)
+    await AsyncStorage.setItem('language', val)
   }
+  const sendLng = async() => {
+    await AsyncStorage.setItem('language', getSelectionMode)
+  }
+  useEffect(() => {
+    sendLng()
+  }, [])
 
   return (
     <View>
       <View
         style={ styles.container }>
         <TouchableOpacity
-          onPress={ () => updatedSwitchData(1) }
+          onPress={ () => updatedSwitchData('castellano') }
           style={
-            getSelectionMode === 1 ? styles.status1 : styles.status2
+            getSelectionMode === 'castellano' ? styles.status1 : styles.status2
           }>
           <Text
             style={ styles.text }>
@@ -35,8 +42,8 @@ const CustomSwitch = ({
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={ () => updatedSwitchData(2) }
-          style={ getSelectionMode === 1 ? styles.status2 : styles.status1 } >
+          onPress={ () => updatedSwitchData('quechua') }
+          style={ getSelectionMode === 'castellano' ? styles.status2 : styles.status1 } >
           <Text
             style={ styles.text }>
             { option2 }

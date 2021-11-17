@@ -5,6 +5,10 @@ export const getProfile = async () => {
   return await Api.get('/users/profile/data')
 }
 
+export const updateProfile = async (userId: number, payload: any) => {
+  return await Api.patch(`/users/profile/${userId}`, payload)
+}
+
 export const getProfilePhoto = async (id: number) => {
   const token = await AsyncStorage.getItem('token') ?? ''
   return await fetch(`https://yanapakunpolicia.com/users/profile/photo/${id}`, {

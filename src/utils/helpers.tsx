@@ -9,7 +9,6 @@ export const getCurrentLocation = async () => {
   }
   const { status } = await Location.requestForegroundPermissionsAsync()
   if (status === 'denied') return location
-  /* Alert.alert('Debes dar permisos para la localizacion') */
 
   const { coords } = await Location.getCurrentPositionAsync({})
   location.status = true

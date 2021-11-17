@@ -1,13 +1,13 @@
 
-import React, { useContext, useEffect, useReducer } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useContext } from 'react'
+import { StyleSheet } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import IndexScreen from '../screens/Auth/IndexScreen'
 import SignUpScreen from '../screens/Auth/SignUpScreen'
 import DrawerNavigator from './DrawerNavigator'
 import SignInScreen from '../screens/Auth/SignInScreen'
 import TutorialScreen from '../screens/Tutorial/TutorialScreen'
-import { AuthContext, authInitialState } from '../context/authContext'
+import { AuthContext } from '../context/authContext'
 
 export type RootStackParams = {
   IndexScreen: undefined

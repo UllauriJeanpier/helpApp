@@ -1,8 +1,8 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Close from '../assets/svg/Closegreen.svg'
 import Idioma from '../assets/svg/idioma.svg'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
   isVisible: boolean
@@ -11,7 +11,23 @@ interface Props {
 
 const ModalLanguage = ({ isVisible, hideAction }: Props) => {
   
-    const [active, setActive] = useState("castellano")
+  const [language, changeLanguage] = useState("castellano")
+
+  const getLng = async () => {
+    const lng = await AsyncStorage.getItem('language')
+    if (lng !== null) {
+      changeLanguage(lng)
+    }
+  }
+  const cngLng = async (l:string) => {
+    await AsyncStorage.setItem('language', l)
+    console.log(l);
+    
+    changeLanguage(l)
+  }
+  useEffect(() => {
+    getLng()
+  }, [])
   return (
 
     <Modal transparent={ true } visible={ isVisible }>
@@ -28,17 +44,17 @@ const ModalLanguage = ({ isVisible, hideAction }: Props) => {
           </View>
           <View>
               <TouchableOpacity 
-                onPress={ () => setActive("castellano") }
+                onPress={ () => cngLng("castellano") }
                 style={[styles.btn, styles.btnCastellano,
-                    active === "castellano" ? styles.btnActive : styles.btn]
+                  language === "castellano" ? styles.btnActive : styles.btn]
                 }
               >
                   <Text style={ styles.btnText }>Castellano</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={ () => setActive("quechua") }
+                onPress={ () => cngLng("quechua") }
                 style={[styles.btn,
-                    active === "quechua" ? styles.btnActive : styles.btn]
+                  language === "quechua" ? styles.btnActive : styles.btn]
                  }
               >
                   <Text style={ styles.btnText }>Quechua</Text>

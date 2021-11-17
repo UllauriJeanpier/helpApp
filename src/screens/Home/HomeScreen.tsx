@@ -10,16 +10,17 @@ import { getCurrentLocation } from '../../utils/helpers'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { updatePartialUser } from '../../services/yanapakun/user'
 import { IUserLogin } from '../../interfaces/authInterfaces'
-import { saveCallHelp } from '../../services/yanapakun/callHelp'
+import { updateProfile } from '../../services/yanapakun/profile'
 
 const HomeScreen = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(true)
   const [location, setLocation] = useState<IPosition>()
+  const [disabled, setDisabled] = useState(false)
 
   const saveTokenNotification = async () => {
     try {
       const user = await AsyncStorage.getItem('user')
-      const token = await AsyncStorage.getItem('token') ?? ''
+      const token = await AsyncStorage.getItem('tokenNotification') ?? ''
       let dataUser: IUserLogin
       if (typeof user === 'string') {
         dataUser = JSON.parse(user)
@@ -35,55 +36,83 @@ const HomeScreen = ({ navigation }: any) => {
   }
 
   const getLocation = async () => {
-    const { status, position } = await getCurrentLocation()
+    const {
+      status,
+      position
+    } = await getCurrentLocation()
     if (!status) {
       // Mostrar nuevamente el modal
       setModalVisible(true)
       return
     }
-    position && setLocation(position)
-    console.log(location)
-    navigation.navigate('AnimatedScreen')
+    await AsyncStorage.setItem('btnHelp', 'disabled')
+    console.log(position, 'Position');
+    position && setLocation(position as IPosition)
+    console.log(location, 'location')
     // Guardar latitud y longitud
+    try {
+      const user = await AsyncStorage.getItem('user')
+      let dataUser: IUserLogin
+      if (typeof user === 'string') {
+        dataUser = JSON.parse(user)
+        await updateProfile(dataUser?.id, {
+          latitude: String(position?.latitude),
+          longitude: String(position?.longitude)
+        })
+        navigation.navigate('AnimatedScreen')
+      }
+    } catch (e) {
+      console.log(e.message)
+    }
   }
 
   const openMenu = () => {
     navigation.toggleDrawer()
   }
+  const getDisabledBtnHelp = async () => {
+    const disabledBtnHelp = await AsyncStorage.getItem('btnHelp') 
+    if(disabledBtnHelp !== null) {
+      setDisabled(true)
+    }
+  }
 
   useEffect(() => {
     saveTokenNotification().then(() => console.log('save token notification'))
+    getDisabledBtnHelp()
   }, [])
 
   return (
     <>
-      <Header title='Yanapakun Policía' icon={ 'menu' } action={ openMenu } />
-        <View style={ styles.container }>
-          <Text style={ styles.txtInfo }>
-            Si necesitas ayuda de forma urgente,
-            presiona el botón para que una
-            autoridad se dirija a tu ubicación
+      <Header title="Yanapakun Policía" icon={ 'menu' } action={ openMenu }/>
+      <View style={ styles.container }>
+        <Text style={ styles.txtInfo }>
+          Si necesitas ayuda de forma urgente,
+          presiona el botón para que una
+          autoridad se dirija a tu ubicación
+        </Text>
+        <TouchableOpacity disabled={ disabled } style={ styles.imageContainer } onPress={ getLocation }>
+          <Alarma width={ '100%' } height={ SCREEN.height * 0.3 }/>
+        </TouchableOpacity>
+        {
+          !disabled ? (
+            <Text style={ styles.txtEmergency }>SOLO EN CASO DE EMERGENCIA</Text>
+          ) : (
+            <Text style={ styles.txtEmergency }>YA ENVIASTE UNA SOLICITUD DE EMERGENCIA</Text>
+          )
+        }
+        <View style={ styles.alertContainer }>
+          <Info width={ 20 } height={ 20 }/>
+          <Text style={ styles.txtAlert }>
+            Recuerda que para la efectividad
+            del aplicativo es importante tener
+            tu ubicación activada
           </Text>
-          <TouchableOpacity style={ styles.imageContainer } onPress={ getLocation } >
-            <Alarma width={ '100%' } height={ SCREEN.height * 0.3 } />
-          </TouchableOpacity>
-          <Text style={ styles.txtEmergency }>
-            SOLO EN CASO DE EMERGENCIA
-          </Text>
-          <View style={ styles.alertContainer }>
-            <Info width={ 20 } height={ 20 }/>
-            <Text style={ styles.txtAlert }>
-              Recuerda que para la efectividad
-              del aplicativo es importante tener
-              tu ubicación activada
-            </Text>
-          </View>
-          <ModalInfo
-            isVisible={ modalVisible }
-            hideAction={ () => setModalVisible(false) }
-          />
         </View>
-        {/*   */}
+        <ModalInfo
+          isVisible={ modalVisible }
+          hideAction={ () => setModalVisible(false) }
+        />
+      </View>
     </>
   )
 }
@@ -110,7 +139,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     alignItems: 'center'
-  //  backgroundColor: 'red'
+    //  backgroundColor: 'red'
   },
   txtEmergency: {
     textAlign: 'center',
