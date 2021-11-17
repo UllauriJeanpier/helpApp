@@ -21,6 +21,8 @@ const ModalLanguage = ({ isVisible, hideAction }: Props) => {
   }
   const cngLng = async (l:string) => {
     await AsyncStorage.setItem('language', l)
+    console.log(l);
+    
     changeLanguage(l)
   }
   useEffect(() => {

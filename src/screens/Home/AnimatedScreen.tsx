@@ -36,7 +36,7 @@ export const AnimatedScreen = ({ navigation }: any) => {
   useEffect(() => {
     scale.value = withRepeat(withSpring(1.2), -1, true)
     if (showAnimated) {
-      callHelp().then(() => console.log('llamada '))
+      callHelp().then(() => console.log('llamada de emergencia'))
     }
     setTimeout(() => {
       setShowAnimated(false)
@@ -49,10 +49,10 @@ export const AnimatedScreen = ({ navigation }: any) => {
       <View style={ styles.containerWait }>
         { showAnimated
           ? <View style={ styles.boxAnimated }>
-            <Animated.View style={ [styles.box, animatedStyle] }/>
-            <View style={ styles.img }>
-              <Alarma height={ 120 } width={ 120 }/>
-            </View>
+              <Animated.View style={ [styles.box, animatedStyle] }/>
+              <View style={ styles.img }>
+                <Alarma height={ 120 } width={ 120 }/>
+              </View>
           </View>
           : <>
             <Text style={ styles.txtSecure }> Espera en un lugar seguro </Text>

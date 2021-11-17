@@ -68,7 +68,10 @@ const CustomDrawer = ({ navigation }: DrawerContentComponentProps) => {
             action={ () => navigation.navigate('ProfileScreen') } />
           <BtnOption
             title={ 'Cambiar idioma' }
-            action={ () => setShowModalLanguage(true) } />
+            action={ () => {
+              navigation.closeDrawer()
+              setShowModalLanguage(true)
+            }} />
           <BtnOption
             title={ 'Números de ayuda' }
             action={ () => navigation.navigate('NumberScreen') } />

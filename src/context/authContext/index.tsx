@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }: any) => {
       await AsyncStorage.removeItem('user')
       await AsyncStorage.removeItem('isLogIn')
       await AsyncStorage.removeItem('language')
+      await AsyncStorage.removeItem('btnHelp')
       await getAuthState()
     } catch (e) {
       console.log(e)

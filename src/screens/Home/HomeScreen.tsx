@@ -15,6 +15,7 @@ import { updateProfile } from '../../services/yanapakun/profile'
 const HomeScreen = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(true)
   const [location, setLocation] = useState<IPosition>()
+  const [disabled, setDisabled] = useState(false)
 
   const saveTokenNotification = async () => {
     try {
@@ -44,8 +45,10 @@ const HomeScreen = ({ navigation }: any) => {
       setModalVisible(true)
       return
     }
-    position && setLocation(position)
-    console.log(location)
+    await AsyncStorage.setItem('btnHelp', 'disabled')
+    console.log(position, 'Position');
+    position && setLocation(position as IPosition)
+    console.log(location, 'location')
     // Guardar latitud y longitud
     try {
       const user = await AsyncStorage.getItem('user')
@@ -66,9 +69,16 @@ const HomeScreen = ({ navigation }: any) => {
   const openMenu = () => {
     navigation.toggleDrawer()
   }
+  const getDisabledBtnHelp = async () => {
+    const disabledBtnHelp = await AsyncStorage.getItem('btnHelp') 
+    if(disabledBtnHelp !== null) {
+      setDisabled(true)
+    }
+  }
 
   useEffect(() => {
     saveTokenNotification().then(() => console.log('save token notification'))
+    getDisabledBtnHelp()
   }, [])
 
   return (
@@ -80,12 +90,16 @@ const HomeScreen = ({ navigation }: any) => {
           presiona el botón para que una
           autoridad se dirija a tu ubicación
         </Text>
-        <TouchableOpacity style={ styles.imageContainer } onPress={ getLocation }>
+        <TouchableOpacity disabled={ disabled } style={ styles.imageContainer } onPress={ getLocation }>
           <Alarma width={ '100%' } height={ SCREEN.height * 0.3 }/>
         </TouchableOpacity>
-        <Text style={ styles.txtEmergency }>
-          SOLO EN CASO DE EMERGENCIA
-        </Text>
+        {
+          !disabled ? (
+            <Text style={ styles.txtEmergency }>SOLO EN CASO DE EMERGENCIA</Text>
+          ) : (
+            <Text style={ styles.txtEmergency }>YA ENVIASTE UNA SOLICITUD DE EMERGENCIA</Text>
+          )
+        }
         <View style={ styles.alertContainer }>
           <Info width={ 20 } height={ 20 }/>
           <Text style={ styles.txtAlert }>
