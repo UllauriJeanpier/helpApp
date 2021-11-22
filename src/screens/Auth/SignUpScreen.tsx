@@ -84,7 +84,7 @@ const SignUpScreen = ({ navigation }: Props) => {
         longitude: ''
       })
       setLoading(false)
-      goToSignIn()
+      navigation.replace('SignInScreen')
     } catch (e) {
       setLoading(false)
       console.log(e, 'Register error')
