@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Alert, Keyboard } from 'react-native'
 import Button from '../../components/Button'
 import Header from '../../components/Header'
 import InputForm from '../../components/InputForm'
@@ -21,9 +21,9 @@ const SignInScreen = ({ navigation }: Props) => {
   const [validatePassword, setValidatePassword] = useState(false)
   const { signIn } = useContext(AuthContext)
 
-  const goToSignUp = () => navigation.navigate('SignUpScreen')
+  const goToSignUp = () => navigation.replace('SignUpScreen')
 
-  const goToIndex = () => navigation.navigate('IndexScreen')
+  const goToIndex = () => navigation.replace('IndexScreen')
 
   const login = async () => {
     if (email.length === 0 || password.length === 0) {
@@ -31,14 +31,18 @@ const SignInScreen = ({ navigation }: Props) => {
       return
     }
     try {
+      Keyboard.dismiss();
       setLoading(true)
       await signIn({
         email,
         password
       })
-    } catch (e) {
-      console.log(e)
       setLoading(false)
+    } catch (e) {
+      setLoading(false)
+      Alert.alert('Login incorrecto')
+      console.log(e, 'Login Error')
+      
     }
   }
 
@@ -59,6 +63,7 @@ const SignInScreen = ({ navigation }: Props) => {
               validateInput={ validateEmail }
               setValidateInput={ setValidateEmail }
               functionValidation={ handleEmail }
+              onSubmitEditing={ login }
               errorMessage={ 'Escribe un correo válido' }
             />
             <InputForm
@@ -69,6 +74,7 @@ const SignInScreen = ({ navigation }: Props) => {
               validateInput={ validatePassword }
               setValidateInput={ setValidatePassword }
               functionValidation={ handlePassword }
+              onSubmitEditing={ login }
               errorMessage={ 'Escribe una contraseña válida' }
               isPassword
             />

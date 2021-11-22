@@ -15,6 +15,7 @@ interface Props {
   setValueInput: Dispatch<React.SetStateAction<string>>
   setValidateInput: Dispatch<React.SetStateAction<boolean>>
   functionValidation: (text: string) => boolean
+  onSubmitEditing: () => void
 }
 
 const InputForm = ({
@@ -29,7 +30,8 @@ const InputForm = ({
   limitCaracteres,
   errorMessage,
   keyboardType,
-  isPassword
+  isPassword,
+  onSubmitEditing
 }: Props) => {
   const validateFunction = (e: string) => {
     if (functionValidation(e)) {
@@ -52,6 +54,9 @@ const InputForm = ({
           secureTextEntry={ isPassword }
           maxLength={ limitCaracteres }
           style={ styles.inputWidth }
+          autoCapitalize="none"
+          onSubmitEditing={ onSubmitEditing }
+          autoCorrect={ false }
           onChangeText={ e => validateFunction(e) }
         />
       </View>

@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import LogoPolicia from '../../assets/svg/LogoPolicia.svg'
-import Alarma from '../../assets/svg/Alarma3.svg'
+import Alarma from '../../assets/svg/LogoAlarma.svg'
 import { RootStackParams } from '../../navigation/StackNavigator'
 import { COLORS, FONTS } from '../../utils/constants'
 import Button from '../../components/Button'
@@ -13,11 +13,11 @@ interface Props extends NativeStackScreenProps<RootStackParams, 'SignInScreen'> 
 
 const IndexScreen = ({ navigation }: Props) => {
   const goToSignIn = () => {
-    navigation.navigate('SignInScreen')
+    navigation.replace('SignInScreen')
   }
 
   const goToSignUp = () => {
-    navigation.navigate('SignUpScreen')
+    navigation.replace('SignUpScreen')
   }
 
   return (

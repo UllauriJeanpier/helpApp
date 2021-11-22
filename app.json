@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "helpApp",
-    "slug": "helpApp",
+    "name": "Yanapakun Huancavelica",
+    "slug": "yanapakun-huancavelica",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,6 +21,7 @@
     },
     "android": {
       "package": "com.likeseasons.yanapakun",
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
