@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { DrawerScreenProps } from '@react-navigation/drawer';
 import Alarma from '../../assets/svg/Alarma5.svg'
 import Info from '../../assets/svg/info.svg'
 import Header from '../../components/Header'
@@ -11,8 +12,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { updatePartialUser } from '../../services/yanapakun/user'
 import { IUserLogin } from '../../interfaces/authInterfaces'
 import { updateProfile } from '../../services/yanapakun/profile'
+import { RootDrawerParams } from '../../navigation/DrawerNavigator'
 
-const HomeScreen = ({ navigation }: any) => {
+interface Props extends DrawerScreenProps<RootDrawerParams, 'HomeScreen'>{}
+
+const HomeScreen = ({ navigation }: Props) => {
   const [modalVisible, setModalVisible] = useState(true)
   const [location, setLocation] = useState<IPosition>()
   const [disabled, setDisabled] = useState(false)
@@ -45,7 +49,6 @@ const HomeScreen = ({ navigation }: any) => {
       setModalVisible(true)
       return
     }
-    await AsyncStorage.setItem('btnHelp', 'disabled')
     console.log(position, 'Position');
     position && setLocation(position as IPosition)
     console.log(location, 'location')
@@ -59,8 +62,9 @@ const HomeScreen = ({ navigation }: any) => {
           latitude: String(position?.latitude),
           longitude: String(position?.longitude)
         })
-        navigation.navigate('AnimatedScreen')
       }
+      setDisabled(true)
+      navigation.navigate('AnimatedScreen')
     } catch (e) {
       console.log(e.message)
     }
@@ -70,15 +74,16 @@ const HomeScreen = ({ navigation }: any) => {
     navigation.toggleDrawer()
   }
   const getDisabledBtnHelp = async () => {
-    const disabledBtnHelp = await AsyncStorage.getItem('btnHelp') 
+    const disabledBtnHelp = await AsyncStorage.getItem('btnHelp')
     if(disabledBtnHelp !== null) {
+      console.log(disabledBtnHelp, 'Deshabilitado');
       setDisabled(true)
     }
   }
 
   useEffect(() => {
-    saveTokenNotification().then(() => console.log('save token notification'))
     getDisabledBtnHelp()
+    saveTokenNotification().then(() => console.log('save token notification'))
   }, [])
 
   return (
@@ -94,10 +99,10 @@ const HomeScreen = ({ navigation }: any) => {
           <Alarma width={ '100%' } height={ SCREEN.height * 0.3 }/>
         </TouchableOpacity>
         {
-          !disabled ? (
-            <Text style={ styles.txtEmergency }>SOLO EN CASO DE EMERGENCIA</Text>
+          disabled ? (
+            <Text style={ styles.txtEmergency }>YA ENVIASTE UNA SOLICITUD DE EMERGENCIA</Text>            
           ) : (
-            <Text style={ styles.txtEmergency }>YA ENVIASTE UNA SOLICITUD DE EMERGENCIA</Text>
+            <Text style={ styles.txtEmergency }>SOLO EN CASO DE EMERGENCIA</Text>
           )
         }
         <View style={ styles.alertContainer }>

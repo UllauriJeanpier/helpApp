@@ -56,8 +56,8 @@ const CustomSwitch = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: 35,
-    width: '60%',
+    // height: 35,
+    width: '65%',
     backgroundColor: COLORS.BG_GRAY,
     borderRadius: 25,
     flexDirection: 'row',
@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 12
+    paddingHorizontal: 12,
+    paddingVertical: 10
   },
   status2: {
     flex: 1,

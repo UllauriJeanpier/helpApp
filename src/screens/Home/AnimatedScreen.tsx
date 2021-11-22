@@ -9,8 +9,13 @@ import Header from '../../components/Header'
 import { FONTS, SCREEN } from '../../utils/constants'
 import { ws } from '../../services/yanapakun/socket'
 import { Socket } from 'socket.io-client'
+import { RootDrawerParams } from '../../navigation/DrawerNavigator';
+import { DrawerScreenProps } from '@react-navigation/drawer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const AnimatedScreen = ({ navigation }: any) => {
+interface Props extends DrawerScreenProps<RootDrawerParams, 'HomeScreen'>{}
+
+export const AnimatedScreen = ({ navigation }: Props) => {
   const [showAnimated, setShowAnimated] = useState(true)
   const [socket, setSocket] = useState<Socket>()
 
@@ -33,7 +38,14 @@ export const AnimatedScreen = ({ navigation }: any) => {
     }
   })
 
+  const sendHelp = async () => {
+    await AsyncStorage.setItem('btnHelp', 'disabled')
+    console.log('Se deshabilito el boton');
+    
+  }
+
   useEffect(() => {
+    sendHelp()
     scale.value = withRepeat(withSpring(1.2), -1, true)
     if (showAnimated) {
       callHelp().then(() => console.log('llamada de emergencia'))
