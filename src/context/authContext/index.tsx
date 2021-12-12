@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import React, { createContext, useEffect, useReducer } from 'react'
+import { Alert } from 'react-native'
 import { authReducer } from './authReducer'
 import { IDataLogin, IResLogin } from '../../interfaces/authInterfaces'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { isPast, addMinutes } from 'date-fns'
 import { refreshToken, userLogin } from '../../services/yanapakun/auth'
+import { RESPONSE_MSG } from '../../utils/responses'
 
 export interface AuthState {
   isLogIn: boolean
@@ -92,14 +94,25 @@ export const AuthProvider = ({ children }: any) => {
   const signIn = async (payload: any) => {
     try {
       const response = await userLogin(payload)
-      const { data }: IResLogin = response.data
-      if (response.status === 201) {
+      console.log(response)
+      if (response.message === RESPONSE_MSG.NOTEMAIL) {
+        Alert.alert('Este email no se encuentra registrado')
+      }
+      if (response.message === RESPONSE_MSG.WRONGCREDENTIALS) {
+        Alert.alert('Ingrese su clave correctamente')
+      }
+
+      if (response.message === RESPONSE_MSG.OK) {
+        const { data }: IResLogin = response
         const tokenExpiration = addMinutes(new Date(), 1440)
         await AsyncStorage.setItem('token', data.access_token)
         await AsyncStorage.setItem('user', JSON.stringify(data.user))
         await AsyncStorage.setItem('isLogIn', JSON.stringify(true))
         await AsyncStorage.setItem('tokenExpiration', JSON.stringify(tokenExpiration))
-        dispatch({ type: 'signIn', payload: data })
+        dispatch({
+          type: 'signIn',
+          payload: data
+        })
       }
     } catch (error) {
       console.log(error.message)

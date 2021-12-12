@@ -31,7 +31,7 @@ const SignInScreen = ({ navigation }: Props) => {
       return
     }
     try {
-      Keyboard.dismiss();
+      Keyboard.dismiss()
       setLoading(true)
       await signIn({
         email,
@@ -42,7 +42,6 @@ const SignInScreen = ({ navigation }: Props) => {
       setLoading(false)
       Alert.alert('Login incorrecto')
       console.log(e, 'Login Error')
-      
     }
   }
 
