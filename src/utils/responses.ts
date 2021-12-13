@@ -6,5 +6,6 @@ export enum RESPONSE_MSG {
   WRONGCREDENTIALS= 'Wrong credentials provided',
   NOTEMAILTORECOVER = 'User with this email does not exist',
   INCORRECTCODE = 'The code is not correct',
-  CORRECTCODE = 'The code is correct'
+  CORRECTCODE = 'The code is correct',
+  CHANGEPASSWORDWRONGEMAIL = 'No exist user with this email'
 }

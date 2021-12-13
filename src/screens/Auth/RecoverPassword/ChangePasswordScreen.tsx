@@ -1,12 +1,14 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native'
 import Button from '../../../components/Button'
 import Header from '../../../components/Header'
 import InputForm from '../../../components/InputForm'
 import Loading from '../../../components/Loading'
 import { RootStackParams } from '../../../navigation/StackNavigator'
+import { changePassword } from '../../../services/yanapakun/user'
 import { FONTS } from '../../../utils/constants'
+import { RESPONSE_MSG } from '../../../utils/responses'
 import { handlePassword } from '../../../utils/validateFuntions'
 
 interface Props extends NativeStackScreenProps<RootStackParams, 'ChangePasswordScreen'> { }
@@ -19,24 +21,31 @@ const ChangePasswordScreen = ({ navigation, route }: Props) => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [validateConfirmPassword, setValidateConfirmPassword] = useState(false)
 
+  const goToSignIn = () => navigation.replace('SignInScreen')
+
   const onSend = async () => {
-    /* if (email.length === 0) {
-      Alert.alert('Complete el campo para continuar')
+    const { email } = route.params
+    if (password.length === 0 || confirmPassword.length === 0) {
+      Alert.alert('Complete los campos para continuar')
+      return
+    }
+    if (password !== confirmPassword) {
       return
     }
     try {
       setLoading(true)
-      const response = await sendMail({ email })
-      if (response.message === RESPONSE_MSG.NOTEMAILTORECOVER) {
+      const response = await changePassword({ email, password })
+      console.log(response)
+      if (response.message === RESPONSE_MSG.CHANGEPASSWORDWRONGEMAIL) {
         Alert.alert('No existe este email registrado')
       } else {
-        navigation.navigate('SendCodeScreen', { email })
+        goToSignIn()
       }
       setLoading(false)
     } catch (err) {
       setLoading(false)
       console.log(err)
-    } */
+    }
   }
 
   return (
@@ -102,7 +111,7 @@ const styles = StyleSheet.create({
     marginBottom: 30
   },
   errorMsg: {
-    marginTop: -10,
+    marginTop: 2,
     fontSize: 15,
     fontFamily: FONTS.ProximaNovaRegular,
     color: 'red'

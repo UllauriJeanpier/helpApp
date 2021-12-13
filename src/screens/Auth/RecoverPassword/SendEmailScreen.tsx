@@ -29,10 +29,11 @@ const SendEmailScreen = ({ navigation }: Props) => {
     try {
       setLoading(true)
       const response = await sendMail({ email })
-      if (response.message === RESPONSE_MSG.NOTEMAILTORECOVER) {
-        Alert.alert('No existe este email registrado')
-      } else {
+      console.log(response)
+      if (response.status) {
         navigation.navigate('SendCodeScreen', { email })
+      } else {
+        Alert.alert('No existe este email registrado')
       }
       setLoading(false)
     } catch (err) {

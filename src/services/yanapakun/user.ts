@@ -21,6 +21,15 @@ export const sendMail = async (payload: any) =>
 
 export const sendCode = async (payload: any) =>
   await fetch(`${baseURL}/users/verifyCode`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  }).then(async response => await response.json())
+
+export const changePassword = async (payload: any) =>
+  await fetch(`${baseURL}/users/resetPassword`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'

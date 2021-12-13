@@ -32,13 +32,15 @@ const SendCodeScreen = ({ navigation, route }: Props) => {
     try {
       setLoading(true)
       const code = `${num1}${num2}${num3}${num4}`
-      /* const response = await sendCode({ email, code })
+      const response = await sendCode({ email, code })
+      console.log(response)
       if (response.message === RESPONSE_MSG.INCORRECTCODE) {
         Alert.alert('El codigo es incorrecto')
+        navigation.navigate('ChangePasswordScreen', { email })
       }
       if (response.message === RESPONSE_MSG.CORRECTCODE) {
         navigation.navigate('ChangePasswordScreen', { email })
-      } */
+      }
       setLoading(false)
     } catch (err) {
       setLoading(false)

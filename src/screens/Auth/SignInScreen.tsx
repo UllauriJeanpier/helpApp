@@ -23,7 +23,7 @@ const SignInScreen = ({ navigation }: Props) => {
 
   const goToSignUp = () => navigation.replace('SignUpScreen')
   const goToIndex = () => navigation.replace('IndexScreen')
-  const goToRecoverPassword = () => navigation.replace('ChangePasswordScreen', { email: 'test' })
+  const goToRecoverPassword = () => navigation.replace('SendEmailScreen')
 
   const login = async () => {
     if (email.length === 0 || password.length === 0) {
