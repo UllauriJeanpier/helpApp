@@ -36,7 +36,7 @@ const SendCodeScreen = ({ navigation, route }: Props) => {
       console.log(response)
       if (response.message === RESPONSE_MSG.INCORRECTCODE) {
         Alert.alert('El codigo es incorrecto')
-        navigation.navigate('ChangePasswordScreen', { email })
+        /* navigation.navigate('ChangePasswordScreen', { email }) */
       }
       if (response.message === RESPONSE_MSG.CORRECTCODE) {
         navigation.navigate('ChangePasswordScreen', { email })
