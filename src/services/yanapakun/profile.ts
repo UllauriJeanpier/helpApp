@@ -6,7 +6,11 @@ export const getProfile = async () => {
 }
 
 export const updateProfile = async (userId: number, payload: any) => {
-  return await Api.patch(`/users/profile/${userId}`, payload)
+  return await Api.patch(`/users/profile/${userId}`, payload, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
 }
 
 export const getProfilePhoto = async (id: number) => {

@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Image, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 import Header from '../../components/Header'
 import UserPhoto from '../../assets/svg/User-yanapakun.svg'
 import Camera from '../../assets/svg/Camara.svg'
-import { getProfile, getProfilePhoto, uploadImage } from '../../services/yanapakun/profile'
+import { getProfile, getProfilePhoto, updateProfile, uploadImage } from '../../services/yanapakun/profile'
 import Loading from '../../components/Loading'
 
 import * as ImagePicker from 'expo-image-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { IUserLogin } from '../../interfaces/authInterfaces'
+import { IProfile } from '../../interfaces/profileInterfaces'
+import Button from '../../components/Button'
+import { updatePartialUser } from '../../services/yanapakun/user'
 
 interface UserData {
   email: string
@@ -34,30 +37,16 @@ interface ProfileData {
 
 const ProfileScreen = ({ navigation }: any) => {
   const [loading, setLoading] = useState(true)
-  const [profile, setProfile] = useState<ProfileData>({
-    age: 0,
-    dateBirth: '',
-    district: '',
-    document: '',
-    emergencyNumber: '',
-    firstName: '',
-    gender: '',
-    id: 0,
-    lastName: '',
-    latitude: '',
-    longitude: '',
-    phone: '',
-    updatedAt: '',
-    user: {
-      email: ''
-    }
-  })
+  const [profile, setProfile] = useState<IProfile>()
+
   const fetchData = async () => {
     try {
       setLoading(true)
       const response = await getProfile()
-      setProfile(response.data)
-      await fetchPhotoUser()
+      if (response) {
+        setProfile(response.data)
+        await fetchPhotoUser()
+      }
     } catch (e) {
       console.log(e)
     }
@@ -132,6 +121,28 @@ const ProfileScreen = ({ navigation }: any) => {
     }
   }
 
+  const onSave = async () => {
+    if (profile) {
+      // save profile
+      const profileDataPayload = {
+        firstName: profile?.firstName,
+        lastName: profile?.lastName,
+        age: profile?.age,
+        document: profile?.document,
+        district: profile?.district,
+        phone: profile?.phone,
+        emergencyNumber: profile.emergencyNumber
+      }
+      await updateProfile(profile.id, JSON.stringify(profileDataPayload))
+      // save userEmail
+      const userDataPayload = {
+        email: profile.user.email
+      }
+      await updatePartialUser(profile.user.id, JSON.stringify(userDataPayload))
+    }
+    navigation.navigate('HomeScreen')
+  }
+
   return (
     <Loading loading={ loading }>
       <SafeAreaView style={ styles.container }>
@@ -160,36 +171,92 @@ const ProfileScreen = ({ navigation }: any) => {
                   </TouchableOpacity>
                 </View>
               </View>
-              <View style={ styles.data }>
-                <View style={ styles.dataUser }>
-                  <Text style={ styles.fontText }>Nombre:</Text>
-                  <Text style={ styles.fontText }>{ profile.firstName } { profile.lastName }</Text>
+              { profile && (
+              <>
+                <View style={ styles.data }>
+                  <View style={ styles.dataUser }>
+                    <Text style={ styles.fontText }>Nombres:</Text>
+                    <TextInput
+                      value={ profile.firstName }
+                      maxLength={ 30 }
+                      style={ styles.fontText }
+                      onChangeText={ e => setProfile({ ...profile, firstName: e }) }
+                  />
+                  </View>
+                  <View style={ styles.dataUser }>
+                    <Text style={ styles.fontText }>Apellidos:</Text>
+                    <TextInput
+                      value={ profile.lastName }
+                      maxLength={ 30 }
+                      style={ styles.fontText }
+                      onChangeText={ e => setProfile({ ...profile, lastName: e }) }
+                  />
+
+                  </View>
+                  <View style={ styles.dataUser }>
+                    <Text style={ styles.fontText }>Edad:</Text>
+                    <TextInput
+                      value={ profile.age.toString() }
+                      keyboardType= 'numeric'
+                      maxLength={ 2 }
+                      style={ styles.fontText }
+                      onChangeText={ e => setProfile({ ...profile, age: Number(e) }) }
+                  />
+                  </View>
+                  <View style={ styles.dataUser }>
+                    <Text style={ styles.fontText }>DNI:</Text>
+                    <TextInput
+                      value={ profile.document }
+                      keyboardType= 'numeric'
+                      maxLength={ 8 }
+                      style={ styles.fontText }
+                      onChangeText={ e => setProfile({ ...profile, document: e }) }
+                  />
+                  </View>
+                  <View style={ styles.dataUser }>
+                    <Text style={ styles.fontText }>Distrito:</Text>
+                    <TextInput
+                      value={ profile.district }
+                      style={ styles.fontText }
+                      maxLength={ 40 }
+                      onChangeText={ e => setProfile({ ...profile, district: e }) }
+                  />
+                  </View>
+                  <View style={ styles.dataUser }>
+                    <Text style={ styles.fontText }>E-mail:</Text>
+                    <TextInput
+                      value={ profile.user.email }
+                      style={ styles.fontText }
+                      maxLength={ 40 }
+                      onChangeText={ e => setProfile({ ...profile, user: { ...profile.user, email: e } }) }
+                  />
+                  </View>
+                  <View style={ styles.dataUser }>
+                    <Text style={ styles.fontText }>Número de teléfono:</Text>
+                    <TextInput
+                      keyboardType= 'numeric'
+                      value={ profile.phone }
+                      style={ styles.fontText }
+                      maxLength={ 11 }
+                      onChangeText={ e => setProfile({ ...profile, phone: e }) }
+                  />
+                  </View>
+                  <View style={ styles.dataUser }>
+                    <Text style={ styles.fontText }>Teléfono de emergencia:</Text>
+                    <TextInput
+                      keyboardType= 'numeric'
+                      value={ profile.emergencyNumber }
+                      style={ styles.fontText }
+                      maxLength={ 11 }
+                      onChangeText={ e => setProfile({ ...profile, emergencyNumber: e }) }
+                  />
+                  </View>
                 </View>
-                <View style={ styles.dataUser }>
-                  <Text style={ styles.fontText }>Edad:</Text>
-                  <Text style={ styles.fontText }>{ profile.age } años</Text>
+                <View style={ styles.btnContainer } >
+                  <Button title='Guardar' action={ onSave } />
                 </View>
-                <View style={ styles.dataUser }>
-                  <Text style={ styles.fontText }>DNI:</Text>
-                  <Text style={ styles.fontText }>{ profile.document }</Text>
-                </View>
-                <View style={ styles.dataUser }>
-                  <Text style={ styles.fontText }>Distrito:</Text>
-                  <Text style={ styles.fontText }>{ profile.district }</Text>
-                </View>
-                <View style={ styles.dataUser }>
-                  <Text style={ styles.fontText }>E-mail:</Text>
-                  <Text style={ styles.fontText }>{ profile.user.email }</Text>
-                </View>
-                <View style={ styles.dataUser }>
-                  <Text style={ styles.fontText }>Número de teléfono:</Text>
-                  <Text style={ styles.fontText }>{ profile.phone }</Text>
-                </View>
-                <View style={ styles.lastDataUser }>
-                  <Text style={ styles.fontText }>Teléfono de emergencia:</Text>
-                  <Text style={ styles.fontText }>{ profile.emergencyNumber }</Text>
-                </View>
-              </View>
+              </>
+              ) }
             </View>
           </View>
         </ScrollView>
@@ -252,5 +319,9 @@ const styles = StyleSheet.create({
     color: '#3A413D',
     fontSize: 16,
     fontWeight: 'bold'
+  },
+  btnContainer: {
+    paddingHorizontal: 25,
+    marginBottom: 10
   }
 })

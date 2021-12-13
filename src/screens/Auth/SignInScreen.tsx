@@ -22,8 +22,8 @@ const SignInScreen = ({ navigation }: Props) => {
   const { signIn } = useContext(AuthContext)
 
   const goToSignUp = () => navigation.replace('SignUpScreen')
-
   const goToIndex = () => navigation.replace('IndexScreen')
+  const goToRecoverPassword = () => navigation.replace('ChangePasswordScreen', { email: 'test' })
 
   const login = async () => {
     if (email.length === 0 || password.length === 0) {
@@ -62,7 +62,6 @@ const SignInScreen = ({ navigation }: Props) => {
               validateInput={ validateEmail }
               setValidateInput={ setValidateEmail }
               functionValidation={ handleEmail }
-              onSubmitEditing={ login }
               errorMessage={ 'Escribe un correo válido' }
             />
             <InputForm
@@ -73,13 +72,12 @@ const SignInScreen = ({ navigation }: Props) => {
               validateInput={ validatePassword }
               setValidateInput={ setValidatePassword }
               functionValidation={ handlePassword }
-              onSubmitEditing={ login }
               errorMessage={ 'Escribe una contraseña válida' }
               isPassword
             />
           </View>
           <View style={ styles.sessionContainer }>
-            <Text style={ styles.txtInf }>Olvidaste tu contraseña</Text>
+            <Text style={ styles.txtInf } onPress={ goToRecoverPassword } >Olvidaste tu contraseña</Text>
             <Button title={ 'Iniciar sesión' } action={ login }/>
             <Text style={ [styles.txtInf, styles.decorationNone] }>¿Aún no estás registrado?{ ' ' }
               <Text style={ styles.boldTxtInfo } onPress={ goToSignUp }>

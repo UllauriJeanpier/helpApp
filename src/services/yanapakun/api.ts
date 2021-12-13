@@ -10,7 +10,7 @@ api.interceptors.request.use(
   async (config) => {
     const urlsExcludedForBearerHeader = [
       '/auth/log-in',
-      '/auth/register'
+      '/auth/register/user'
     ]
     if (!urlsExcludedForBearerHeader.includes(config.url ?? '')) {
       const token = await AsyncStorage.getItem('token') ?? ''

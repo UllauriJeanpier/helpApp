@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, View, Alert, Keyboard } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Alert, Keyboard } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import Header from '../../components/Header'
@@ -65,7 +65,7 @@ const SignUpScreen = ({ navigation }: Props) => {
     }
     try {
       setLoading(true)
-      Keyboard.dismiss();
+      Keyboard.dismiss()
       await userSignUp({
         email: email,
         password: password,
@@ -110,7 +110,6 @@ const SignUpScreen = ({ navigation }: Props) => {
             setValidateInput={ setValidateName }
             functionValidation={ handleName }
             errorMessage={ 'Escribe un nombre válido' }
-            onSubmitEditing={ registro }
         />
           <InputForm
             label={ 'Apellidos:' }
@@ -121,7 +120,6 @@ const SignUpScreen = ({ navigation }: Props) => {
             setValidateInput={ setValidateSurname }
             functionValidation={ handleName }
             errorMessage={ 'Escribe un apellido válido' }
-            onSubmitEditing={ registro }
         />
           <InputForm
             label={ 'Edad:' }
@@ -133,7 +131,6 @@ const SignUpScreen = ({ navigation }: Props) => {
             setValidateInput={ setValidateAge }
             functionValidation={ handleAge }
             errorMessage={ 'Escribe una edad válida' }
-            onSubmitEditing={ registro }
         />
           <InputForm
             label={ 'Número de DNI:' }
@@ -145,7 +142,6 @@ const SignUpScreen = ({ navigation }: Props) => {
             keyboardType="numeric"
             functionValidation={ handleDNI }
             errorMessage={ 'Escribe un DNI válido' }
-            onSubmitEditing={ registro }
         />
           <InputForm
             label={ 'Distrito:' }
@@ -156,7 +152,6 @@ const SignUpScreen = ({ navigation }: Props) => {
             setValidateInput={ setValidateDistrict }
             functionValidation={ handleDistrict }
             errorMessage={ 'Escribe un distrito válido' }
-            onSubmitEditing={ registro }
         />
 
           <InputForm
@@ -168,7 +163,6 @@ const SignUpScreen = ({ navigation }: Props) => {
             setValidateInput={ setValidateEmail }
             functionValidation={ handleEmail }
             errorMessage={ 'Escribe un correo válido' }
-            onSubmitEditing={ registro }
         />
 
           <InputForm
@@ -181,7 +175,6 @@ const SignUpScreen = ({ navigation }: Props) => {
             keyboardType="numeric"
             errorMessage={ 'Escribe un teléfono válido' }
             placeholder={ '' }
-            onSubmitEditing={ registro }
         />
 
           <InputForm
@@ -194,7 +187,6 @@ const SignUpScreen = ({ navigation }: Props) => {
             keyboardType="numeric"
             errorMessage={ 'Escribe un teléfono válido' }
             placeholder={ '' }
-            onSubmitEditing={ registro }
         />
 
           <InputForm
@@ -207,7 +199,6 @@ const SignUpScreen = ({ navigation }: Props) => {
             functionValidation={ handlePassword }
             errorMessage={ 'Escribe una contraseña válida' }
             isPassword
-            onSubmitEditing={ registro }
         />
           <InputForm
             label={ 'Confirmar contraseña:' }
@@ -219,7 +210,6 @@ const SignUpScreen = ({ navigation }: Props) => {
             functionValidation={ handlePassword }
             // errorMessage={'Escribe una contraseña válida' }
             isPassword
-            onSubmitEditing={ registro }
         />
           {
           password !== confirmPassword
